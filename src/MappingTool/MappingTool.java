@@ -61,6 +61,8 @@ public class MappingTool extends JLabel {
 	static List<Node> bestPath = new ArrayList<Node>();
 	static List<Node> finalNodes = new ArrayList<Node>();
 	static List<Node> edgeNodes = new ArrayList<Node>();
+	static List<Node> mapNodesTemp = new ArrayList<Node>();
+
 
 
 
@@ -442,14 +444,29 @@ public class MappingTool extends JLabel {
 
 
 						if(numberClicks > 1){
+							System.out.println("********************");
+							System.out.println("STARTING A*");
+							System.out.println("********************");
 
 							Settings defaultSettings = new Settings(false, false, false);
-							AStar astar = new AStar(mapNodes, defaultSettings);
+							mapNodesTemp = mapNodes;
 
+							AStar astar = new AStar(mapNodes, defaultSettings);
+							//tempNodes = mapNodes;
 							bestPath = astar.findPath(mapNodes.get(firstNodeLoc), mapNodes.get(secondNodeLoc));
 							System.out.println(bestPath);
 							drawPath = true;
+							mapNodes = mapNodesTemp;
+							mapNodesTemp.clear();
+							numberClicks = 0;
+							firstNodeLoc = 0;
+							secondNodeLoc = 0;
+							calcPath = false;
 							repaint();
+
+							//mapNodes = tempNodes;
+//							//numberClicks = 0;
+							//tempNodes.clear();
 						}
 
 					}
@@ -618,7 +635,7 @@ public class MappingTool extends JLabel {
 						frame.repaint();
 						imageLoaded = true;
 					} catch (IOException ex) {
-						Logger.getLogger(LoadMap.class.getName()).log(Level.SEVERE, null, ex);
+						Logger.getLogger(MappingTool.class.getName()).log(Level.SEVERE, null, ex);
 
 					}
 				}
