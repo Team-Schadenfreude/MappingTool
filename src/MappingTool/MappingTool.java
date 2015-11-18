@@ -261,10 +261,10 @@ public class MappingTool extends JLabel {
 					System.out.println(cellHeight);
 
 
-					int x1 = (mapNodes.get(firstNodeLoc).xPos*scaleX)+(cellWidth/2);
-					int y1 = (mapNodes.get(firstNodeLoc).yPos*scaleY)+(cellHeight/2);
-					int x2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).xPos*scaleX)+(cellWidth/2);
-					int y2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).yPos*scaleY)+(cellHeight/2);
+					int x1 = (mapNodes.get(firstNodeLoc).xPos*scaleX)+(scaleX/2);
+					int y1 = (mapNodes.get(firstNodeLoc).yPos*scaleY)+(scaleY/2);
+					int x2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).xPos*scaleX)+(scaleX/2);
+					int y2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).yPos*scaleY)+(scaleY/2);
 
 					System.out.println(x1);
 					System.out.println(y1);
@@ -1012,12 +1012,4 @@ public class MappingTool extends JLabel {
 		}
 		return null;
 	}
-
-
-
-
-
-
-
-
 }
