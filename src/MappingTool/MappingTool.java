@@ -98,7 +98,8 @@ public class MappingTool extends JLabel {
 	int CELLSY = 40;
 	int[][] grid2;
 	static int numberClicks;
-
+	int pos1 = 0;
+	int pos2 = 0;
 	//strings
 	String path;
 
@@ -146,7 +147,6 @@ public class MappingTool extends JLabel {
 
 
 			if (img != null) {
-				System.out.println("Setting cell width and height");
 				int cellHeight = (int) (getHeight() / CELLSY); 
 				int cellWidth = (int) (getWidth() / CELLSX);
 				scaleX = cellWidth;
@@ -181,15 +181,17 @@ public class MappingTool extends JLabel {
 
 				}
 
-
+				
 				for(int i = 0; i < mapNodes.size();i++){
-					System.out.println(mapNodes.get(i).xPos);
-					System.out.println(mapNodes.get(i).yPos);
-
+					
 
 					g.setColor(Color.red);
-					System.out.println("Drawing existing nodes");
 					g.fillRect(mapNodes.get(i).xPos*scaleX, mapNodes.get(i).yPos*scaleY, cellWidth, cellHeight);
+					for (int y = 0; y < getHeight(); y+=cellHeight) {
+						for (int x = 0; x < getWidth(); x+=cellWidth) {
+								grid2[mapNodes.get(i).xPos*scaleX][mapNodes.get(i).yPos*scaleY] = 1;
+							}
+						}
 				}
 
 
@@ -237,10 +239,7 @@ public class MappingTool extends JLabel {
 					int y1 = mapNodes.get(firstNodeLoc).yPos*scaleY+cellHeight/2;
 					int x2 = mapNodes.get(secondNodeLoc).xPos*scaleX+cellWidth/2;
 					int y2 = mapNodes.get(secondNodeLoc).yPos*scaleY+cellHeight/2;
-					System.out.println(x1);
-					System.out.println(y1);
-					System.out.println(x2);
-					System.out.println(y2);
+				
 
 					g.setColor(Color.ORANGE);
 					g.drawLine(x1,y1,x2,y2);
@@ -253,26 +252,31 @@ public class MappingTool extends JLabel {
 			if(renderEdges){
 				System.out.println("Rendering Edges");
 
-				System.out.println(firstNodeLoc);
-				System.out.println(mapNodes.get(firstNodeLoc).connectioNodes);
-				for(int i = 0; i < mapNodes.get(firstNodeLoc).connectioNodes.size();i++){
+				for(int i = 0; i < mapNodes.size()-1;i++){
+					for(int j = 0; j <mapNodes.get(i).connectioNodes.size();j++){
 
-					System.out.println(cellWidth);
-					System.out.println(cellHeight);
+						int x1 = (mapNodes.get(i).xPos*scaleX)+(scaleX/2);
+						int y1 = (mapNodes.get(i).yPos*scaleY)+(scaleY/2);
+						int x2 = (mapNodes.get(i).connectioNodes.get(j).xPos*scaleX)+(scaleX/2);
+						int y2 = (mapNodes.get(i).connectioNodes.get(j).yPos*scaleY)+(scaleY/2);
+						g.setColor(Color.GREEN);
+						g.drawLine(x1,y1,x2,y2);
+					}
+					//
+					//					System.out.println(cellWidth);
+					//					System.out.println(cellHeight);
+					//
+					//
+					//				
+					//
+					//					System.out.println(x1);
+					//					System.out.println(y1);
+					//					System.out.println(x2);
+					//					System.out.println(y2);
+					//
 
 
-					int x1 = (mapNodes.get(firstNodeLoc).xPos*scaleX)+(scaleX/2);
-					int y1 = (mapNodes.get(firstNodeLoc).yPos*scaleY)+(scaleY/2);
-					int x2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).xPos*scaleX)+(scaleX/2);
-					int y2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).yPos*scaleY)+(scaleY/2);
 
-					System.out.println(x1);
-					System.out.println(y1);
-					System.out.println(x2);
-					System.out.println(y2);
-
-					g.setColor(Color.GREEN);
-					g.drawLine(x1,y1,x2,y2);
 
 				}
 
@@ -356,6 +360,7 @@ public class MappingTool extends JLabel {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		//	setContentPane(contentPane);
 		contentPane.setLayout(null);
+
 		System.out.println("Second");
 
 
@@ -404,29 +409,33 @@ public class MappingTool extends JLabel {
 
 					if(calcPath){
 
-
-
-
+					
+					System.out.println("NumbClicks is: "+numberClicks);
 						if(numberClicks ==0){
 
 							mouseX1 = (int)me.getX();
 							mouseY1 = (int) me.getY();
+							System.out.println(mouseY1);
+
 							mouseX1 = setAlignedMouseX(mouseX1,imageWidth,CELLSX);
 							mouseY1 = setAlignedMouseY(mouseY1,imageHeight,CELLSY);
+							System.out.println("**********");
+							System.out.println(mouseX1);
+							System.out.println(mouseY1);
+							System.out.println("**********");
+
 
 							for(int i =0; i<mapNodes.size();i++){
+								
+							
 								if(mapNodes.get(i).xPos == mouseX1 && mapNodes.get(i).yPos == mouseY1){
-									firstNodeLoc = i;
+									pos1 = i;
 									numberClicks += 1;	
 									System.out.println("Worked");
+									System.out.println(pos1);
 
 								} else {
-									System.out.println("*******************");
-									System.out.println(mapNodes.get(i).xPos);
-									System.out.println(mapNodes.get(i).yPos);
-									System.out.println(mouseX1);
-									System.out.println(mouseY1);
-									System.out.println("*******************");
+									
 
 
 								}
@@ -439,23 +448,19 @@ public class MappingTool extends JLabel {
 							mouseY2 = setAlignedMouseY(mouseY2,imageHeight,CELLSY);
 							for(int i =0; i<mapNodes.size();i++){
 								if(mapNodes.get(i).xPos == mouseX2 && mapNodes.get(i).yPos == mouseY2){
-									secondNodeLoc = i;
+									pos2 = i;
+									System.out.println(pos2);
 
 									numberClicks = 2;
 									System.out.println("Worked");
 
 								} else {
-									System.out.println("*******************");
-									System.out.println(mapNodes.get(i).xPos);
-									System.out.println(mapNodes.get(i).yPos);
-									System.out.println(mouseX1);
-									System.out.println(mouseY1);
-									System.out.println("*******************");
+
 								}
 							}
 						}
 
-
+						System.out.println(pos1+" "+pos2);
 
 
 
@@ -469,24 +474,31 @@ public class MappingTool extends JLabel {
 						if(numberClicks > 1){
 							System.out.println("********************");
 							System.out.println("STARTING A*");
-							System.out.println("********************");
+							System.out.println(pos1+" "+pos2);
 
+							System.out.println("********************");
+							
 							Settings defaultSettings = new Settings(false, false, false);
 							mapNodesTemp = mapNodes;
 
 							AStar astar = new AStar(mapNodes, defaultSettings);
 							//tempNodes = mapNodes;
-							bestPath = astar.findPath(mapNodes.get(firstNodeLoc), mapNodes.get(secondNodeLoc));
+							bestPath = astar.findPath(mapNodes.get(pos1), mapNodes.get(pos2));
 							System.out.println(bestPath);
+							System.out.println(mapNodes);
 							drawPath = true;
 							mapNodes = mapNodesTemp;
-							mapNodesTemp.clear();
+							//mapNodesTemp.clear();
+							firstNodeLoc=0;
+							secondNodeLoc=0;
+							pos1 = 0;
+							pos2 = 0;
 							numberClicks = 0;
-							firstNodeLoc = 0;
-							secondNodeLoc = 0;
+							
+							
 							calcPath = false;
 							repaint();
-
+						
 							//mapNodes = tempNodes;
 							//							//numberClicks = 0;
 							//tempNodes.clear();
@@ -535,12 +547,12 @@ public class MappingTool extends JLabel {
 									System.out.println("Found at: " +i);
 									tempNodes.add(mapNodes.get(i));
 									firstNodeLoc = i;
+									numberClicks = 1;
 
 								} else {
 									System.out.println("Didnt Work");
 								}
 							}
-							numberClicks = 1;
 
 						} else if(numberClicks == 1) {
 							System.out.println(tempNodes.size());
@@ -549,24 +561,27 @@ public class MappingTool extends JLabel {
 							mouseY2 = (int) me.getY();
 							mouseX2 = setAlignedMouseX(mouseX2,imageWidth,CELLSX);
 							mouseY2 = setAlignedMouseY(mouseY2,imageHeight,CELLSY);
-							numberClicks = 3;
-							for(int i =0; i<mapNodes.size();i++){
-								if(mapNodes.get(i).xPos == mouseX2 && mapNodes.get(i).yPos == mouseY2){
-									System.out.println("Worked 2");
-									System.out.println("Found at: " +i);
 
-									tempNodes.add(mapNodes.get(i));
-									secondNodeLoc = i;
-								} else {
-									System.out.println("Didnt Work");
+							if(mouseX2 ==mouseX1 && mouseY2 == mouseY1){
+								System.out.println("Same node: Cant make connection");
+
+							} else {
+								for(int i =0; i<mapNodes.size();i++){
+									if(mapNodes.get(i).xPos == mouseX2 && mapNodes.get(i).yPos == mouseY2){
+										System.out.println("Worked 2");
+										System.out.println("Found at: " +i);
+										numberClicks = 3;
+										tempNodes.add(mapNodes.get(i));
+										secondNodeLoc = i;
+									} else {
+										System.out.println("Didnt Work");
+									}
 								}
-							}
+							}								
+
 						}
 
-						System.out.println("***1****");
-						System.out.println(firstNodeLoc);
-						System.out.println(secondNodeLoc);
-						System.out.println("***1****");
+					
 
 						if(tempNodes.size() == 2){
 							tempNodes.get(0).neighbors = new Edge[]{
@@ -584,10 +599,7 @@ public class MappingTool extends JLabel {
 							};
 							tempNodes.get(1).connectioNodes.add(tempNodes.get(0));
 
-							System.out.println("*******");
-							System.out.println(firstNodeLoc);
-							System.out.println(secondNodeLoc);
-							System.out.println("*******");
+							
 
 							mapNodes.remove(firstNodeLoc);
 							mapNodes.add(firstNodeLoc, tempNodes.get(0));
@@ -641,7 +653,6 @@ public class MappingTool extends JLabel {
 						System.out.println(path);
 						setIcon(new ImageIcon(img));
 						setBounds(0,0,img.getWidth(),img.getHeight());
-
 						//contentPane.add(lblMap);
 						frame.setSize(img.getWidth()+200,img.getHeight());
 						btnLoadMap.setBounds(img.getWidth()+10, 11, 113+offset, 23);
@@ -823,7 +834,6 @@ public class MappingTool extends JLabel {
 
 
 			for (int i = 0; i<mapNodes.size();i++){
-				System.out.println(mapNodes.get(i).nodeName);
 				writer.append(mapNodes.get(i).nodeName);
 				writer.append(',');
 				writer.append(Integer.toString(mapNodes.get(i).xPos));
@@ -955,38 +965,45 @@ public class MappingTool extends JLabel {
 				if (n1.neighbors == null)
 				{
 					n1.neighbors = new Edge[]{
-							new Edge(n1, Edge.getDistance(n1, n2))
+							new Edge(n2, Edge.getDistance(n1, n2))
 					};
+					edgeNodes.add(n1);
+					edgeNodes.add(n2);
 
 					n1.connectioNodes.add(n2);
 				}else
 				{
 					n1.neighbors = new Edge[]{
-							new Edge(n1, Edge.getDistance(n1, n2))
+							new Edge(n2, Edge.getDistance(n1, n2))
 					};
 					n1.connectioNodes.add(n2);
-
+					edgeNodes.add(n1);
+					edgeNodes.add(n2);
 				}
 
 
 
 				if (n2.neighbors == null)
 				{
-					n1.neighbors = new Edge[]{
+					n2.neighbors = new Edge[]{
 							new Edge(n1, Edge.getDistance(n1, n2))
 					};	
 					n2.connectioNodes.add(n1);
+					edgeNodes.add(n1);
+					edgeNodes.add(n2);
 
 				}
 
 
 				else
 				{
-					n1.neighbors = new Edge[]{
+					n2.neighbors = new Edge[]{
 							new Edge(n1, Edge.getDistance(n1, n2))
 					};				
 
 					n2.connectioNodes.add(n1);
+					edgeNodes.add(n1);
+					edgeNodes.add(n2);
 				}
 			}
 

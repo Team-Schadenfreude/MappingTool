@@ -119,6 +119,8 @@ public class AStar{
 			//here we are checking every edge of every neighboring node for the node we are searching for
 			
 			for(Edge edge : current.neighbors){
+				System.out.println("Failing at: "+current);
+				System.out.println("Failing at: "+current.neighbors);
 				Node neighbor = edge.connection;
 				double cost = edge.cost;
 				double gScoreTemp = current.gValue + cost;
