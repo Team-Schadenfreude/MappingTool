@@ -48,9 +48,6 @@ public class Node{
             return nodeName;
     }
     
-    public Edge[] toString2(){
-        return neighbors;
-}
     
     
     

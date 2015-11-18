@@ -3,7 +3,7 @@ package MappingTool;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-
+import MappingTool.Node;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -13,12 +13,16 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +30,9 @@ import java.util.logging.Logger;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -130,7 +137,6 @@ public class MappingTool extends JLabel {
 
 
 
-
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if(imageLoaded){
@@ -154,6 +160,10 @@ public class MappingTool extends JLabel {
 							grid2[x][y] = 0;
 						}	
 					}
+
+
+
+
 				}
 
 				doOnce = false;
@@ -169,7 +179,20 @@ public class MappingTool extends JLabel {
 					//System.out.println(adjustedMouseX*cellWidth);
 					//System.out.println(adjustedMouseY*cellHeight);
 
-				}	
+				}
+
+
+				for(int i = 0; i < mapNodes.size();i++){
+					System.out.println(mapNodes.get(i).xPos);
+					System.out.println(mapNodes.get(i).yPos);
+
+
+					g.setColor(Color.red);
+					System.out.println("Drawing existing nodes");
+					g.fillRect(mapNodes.get(i).xPos*scaleX, mapNodes.get(i).yPos*scaleY, cellWidth, cellHeight);
+				}
+
+
 				for (int y = 0; y < getHeight(); y+=cellHeight) {
 					for (int x = 0; x < getWidth(); x+=cellWidth) {
 
@@ -210,60 +233,60 @@ public class MappingTool extends JLabel {
 
 
 				if(renderEdge){
-						int x1 = mapNodes.get(firstNodeLoc).xPos*scaleX+cellWidth/2;
-						int y1 = mapNodes.get(firstNodeLoc).yPos*scaleY+cellHeight/2;
-						int x2 = mapNodes.get(secondNodeLoc).xPos*scaleX+cellWidth/2;
-						int y2 = mapNodes.get(secondNodeLoc).yPos*scaleY+cellHeight/2;
-						System.out.println(x1);
-						System.out.println(y1);
-						System.out.println(x2);
-						System.out.println(y2);
+					int x1 = mapNodes.get(firstNodeLoc).xPos*scaleX+cellWidth/2;
+					int y1 = mapNodes.get(firstNodeLoc).yPos*scaleY+cellHeight/2;
+					int x2 = mapNodes.get(secondNodeLoc).xPos*scaleX+cellWidth/2;
+					int y2 = mapNodes.get(secondNodeLoc).yPos*scaleY+cellHeight/2;
+					System.out.println(x1);
+					System.out.println(y1);
+					System.out.println(x2);
+					System.out.println(y2);
 
-						g.setColor(Color.ORANGE);
-						g.drawLine(x1,y1,x2,y2);
-					}
-					renderEdge = false;
+					g.setColor(Color.ORANGE);
+					g.drawLine(x1,y1,x2,y2);
 				}
-
-
-
-				if(renderEdges){
-					System.out.println("Rendering Edges");
-
-					System.out.println(firstNodeLoc);
-					System.out.println(mapNodes.get(firstNodeLoc).connectioNodes);
-					for(int i = 0; i < mapNodes.get(firstNodeLoc).connectioNodes.size();i++){
-
-						System.out.println(cellWidth);
-						System.out.println(cellHeight);
-
-
-						int x1 = (mapNodes.get(firstNodeLoc).xPos*scaleX)+(cellWidth/2);
-						int y1 = (mapNodes.get(firstNodeLoc).yPos*scaleY)+(cellHeight/2);
-						int x2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).xPos*scaleX)+(cellWidth/2);
-						int y2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).yPos*scaleY)+(cellHeight/2);
-			
-						System.out.println(x1);
-						System.out.println(y1);
-						System.out.println(x2);
-						System.out.println(y2);
-
-						g.setColor(Color.GREEN);
-						g.drawLine(x1,y1,x2,y2);
-
-					}
-
-					renderEdges = false;
-					showNodeEdges = false;
-				}
-
-
-
-
-
+				renderEdge = false;
 			}
+
+
+
+			if(renderEdges){
+				System.out.println("Rendering Edges");
+
+				System.out.println(firstNodeLoc);
+				System.out.println(mapNodes.get(firstNodeLoc).connectioNodes);
+				for(int i = 0; i < mapNodes.get(firstNodeLoc).connectioNodes.size();i++){
+
+					System.out.println(cellWidth);
+					System.out.println(cellHeight);
+
+
+					int x1 = (mapNodes.get(firstNodeLoc).xPos*scaleX)+(cellWidth/2);
+					int y1 = (mapNodes.get(firstNodeLoc).yPos*scaleY)+(cellHeight/2);
+					int x2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).xPos*scaleX)+(cellWidth/2);
+					int y2 = (mapNodes.get(firstNodeLoc).connectioNodes.get(i).yPos*scaleY)+(cellHeight/2);
+
+					System.out.println(x1);
+					System.out.println(y1);
+					System.out.println(x2);
+					System.out.println(y2);
+
+					g.setColor(Color.GREEN);
+					g.drawLine(x1,y1,x2,y2);
+
+				}
+
+				renderEdges = false;
+				showNodeEdges = false;
+			}
+
+
+
+
+
 		}
-	
+	}
+
 
 
 
@@ -465,7 +488,7 @@ public class MappingTool extends JLabel {
 							repaint();
 
 							//mapNodes = tempNodes;
-//							//numberClicks = 0;
+							//							//numberClicks = 0;
 							//tempNodes.clear();
 						}
 
@@ -565,7 +588,7 @@ public class MappingTool extends JLabel {
 							System.out.println(firstNodeLoc);
 							System.out.println(secondNodeLoc);
 							System.out.println("*******");
-							
+
 							mapNodes.remove(firstNodeLoc);
 							mapNodes.add(firstNodeLoc, tempNodes.get(0));
 							mapNodes.remove(secondNodeLoc);
@@ -609,12 +632,16 @@ public class MappingTool extends JLabel {
 						int width = img.getWidth();
 						int height = img.getHeight();
 						grid2 = new int[img.getWidth()][img.getHeight()];
-
+						getNodesFromFile(Paths.get(path).toString()+"\\mapNodes.csv");
+						connectEdgesFromFile(mapNodes,Paths.get(path).toString()+"\\mapEdges.csv");
+						System.out.println(mapNodes.get(0).neighbors);
+						System.out.println(mapNodes);
 						File csvNodeFile =(new File(path+"node.csv")); 
 						File csvEdgeFile =(new File(path+"edge.csv")); 
 						System.out.println(path);
 						setIcon(new ImageIcon(img));
 						setBounds(0,0,img.getWidth(),img.getHeight());
+
 						//contentPane.add(lblMap);
 						frame.setSize(img.getWidth()+200,img.getHeight());
 						btnLoadMap.setBounds(img.getWidth()+10, 11, 113+offset, 23);
@@ -725,6 +752,7 @@ public class MappingTool extends JLabel {
 
 			public void actionPerformed(ActionEvent arg0) {
 
+
 				saveMapNodes(Paths.get(path).toString()+"\\mapNodes.csv");
 				saveMapEdges(Paths.get(path).toString()+"\\mapEdges.csv");
 				saveMapScale(Paths.get(path).toString()+"\\mapScale.csv");
@@ -732,7 +760,7 @@ public class MappingTool extends JLabel {
 
 			}          
 		});
-		
+
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(0, 0, 4, 22);
 		contentPane.add(textArea);
@@ -839,7 +867,7 @@ public class MappingTool extends JLabel {
 			e.printStackTrace();
 		} 
 	}
-	
+
 	private static void saveMapScale(String fileName){
 
 		try
@@ -847,11 +875,11 @@ public class MappingTool extends JLabel {
 			FileWriter writer = new FileWriter(fileName);
 
 
-				writer.append(Integer.toString(scaleX));
-				writer.append(",");
-				writer.append(Integer.toString(scaleY));
+			writer.append(Integer.toString(scaleX));
+			writer.append(",");
+			writer.append(Integer.toString(scaleY));
 
-			
+
 			writer.flush();
 			writer.close();
 		}
@@ -860,4 +888,136 @@ public class MappingTool extends JLabel {
 			e.printStackTrace();
 		} 
 	}
+
+	private void getNodesFromFile(String filePath)
+	{
+		List<Node> nodeList = new ArrayList<Node>();
+		BufferedReader br = null;
+		String line = "";
+		String delimiter = ",";
+		int nodeNameIndex = 0;
+		int nodeXIndex = 1;
+		int nodeYIndex = 2;
+		int nodeDescIndex = 3;
+
+		try {
+
+			br = new BufferedReader(new FileReader(filePath));
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] nodeData = line.split(delimiter);
+				String name = nodeData[nodeNameIndex];
+				int x = Integer.parseInt(nodeData[nodeXIndex]);
+				int y = Integer.parseInt(nodeData[nodeYIndex]);
+				String description = nodeData[nodeDescIndex];
+				Node newNode = new Node(name,0,0,0,false, x, y, description);
+				nodeList.add(newNode);
+			}
+
+		} 
+		catch (FileNotFoundException e) {e.printStackTrace();} 
+		catch (IOException e) {e.printStackTrace();} 
+		finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {e.printStackTrace();}
+			}
+		}
+		mapNodes = nodeList;
+	}
+
+
+	private static void connectEdgesFromFile(List<Node> nodeList, String filePath)
+	{
+		BufferedReader br = null;
+		String line = "";
+		String delimiter = ",";
+		int edgeX1Index = 0;
+		int edgeY1Index = 1;
+		int edgeX2Index = 2;
+		int edgeY2Index = 3;
+
+		try {
+
+			br = new BufferedReader(new FileReader(filePath));
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] edgeData = line.split(delimiter);
+				int x1 = Integer.parseInt(edgeData[edgeX1Index]);
+				int y1 = Integer.parseInt(edgeData[edgeY1Index]);
+				int x2 = Integer.parseInt(edgeData[edgeX2Index]);
+				int y2 = Integer.parseInt(edgeData[edgeY2Index]);
+				Node n1 = findNodeByXY(nodeList, x1, y1);
+				Node n2 = findNodeByXY(nodeList, x2, y2);
+				if (n1.neighbors == null)
+				{
+					n1.neighbors = new Edge[]{
+							new Edge(n1, Edge.getDistance(n1, n2))
+					};
+
+					n1.connectioNodes.add(n2);
+				}else
+				{
+					n1.neighbors = new Edge[]{
+							new Edge(n1, Edge.getDistance(n1, n2))
+					};
+					n1.connectioNodes.add(n2);
+
+				}
+
+
+
+				if (n2.neighbors == null)
+				{
+					n1.neighbors = new Edge[]{
+							new Edge(n1, Edge.getDistance(n1, n2))
+					};	
+					n2.connectioNodes.add(n1);
+
+				}
+
+
+				else
+				{
+					n1.neighbors = new Edge[]{
+							new Edge(n1, Edge.getDistance(n1, n2))
+					};				
+
+					n2.connectioNodes.add(n1);
+				}
+			}
+
+		} 
+		catch (FileNotFoundException e) {e.printStackTrace();} 
+		catch (IOException e) {e.printStackTrace();} 
+		finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {e.printStackTrace();}
+			}
+		}
+	}
+
+	public static Node findNodeByXY(List<Node> nodeList, int x, int y)//Want to change this to throwing an exception when the node is not found
+	{
+		for(Node n : nodeList){
+			if(n.xPos == x && n.yPos == y)
+			{
+				return n;
+			}
+		}
+		return null;
+	}
+
+
+
+
+
+
+
+
 }
