@@ -658,7 +658,6 @@ public class MappingTool extends JLabel {
 						btnLoadMap.setBounds(img.getWidth()+10, 11, 113+offset, 23);
 						btnAddNode.setBounds(img.getWidth()+10, 45, 113+offset, 23);
 						btnAddEdge.setBounds(img.getWidth()+10, 79, 113+offset, 23);
-						btnDeleteNode.setBounds(img.getWidth()+10, 113, 113+offset, 23);
 						btnShowNodeEdges.setBounds(img.getWidth()+10, 147, 113+offset, 23);
 						btnRunButton.setBounds(img.getWidth()+10, 181, 113+offset, 23);
 						btnShowGrid.setBounds(img.getWidth()+10, 215, 113+offset, 23);
@@ -719,16 +718,7 @@ public class MappingTool extends JLabel {
 		});
 		contentPane.add(btnAddEdge);
 
-		btnDeleteNode.setFocusable(false);
-		btnDeleteNode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-
-
-		btnDeleteNode.setBounds(661, 113, 113, 23);
-		btnDeleteNode.setFocusable(false);
-		contentPane.add(btnDeleteNode);
+		
 
 		btnShowNodeEdges.setBounds(661, 147, 113, 23);
 		btnShowNodeEdges.setFocusable(false);
