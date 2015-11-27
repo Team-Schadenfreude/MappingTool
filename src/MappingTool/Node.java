@@ -32,6 +32,14 @@ public class Node{
             this.yPos = yPos;
             this.description = description;
     }
+    public Node(String nodeName, Boolean isObstacle, int xPos, int yPos, String description){
+        this.nodeName = nodeName;
+        this.isObstacle = isObstacle;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.description = description;
+}
+    
     public Node(int xPos, int yPos, String nodeName)
     {
     	this.nodeName = nodeName;
