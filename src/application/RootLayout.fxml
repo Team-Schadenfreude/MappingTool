@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+   <children>
+      <ImageView fx:id="mapView" fitHeight="600.0" fitWidth="1000.0" layoutX="0.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="name" layoutX="14.0" layoutY="326.0" text="Node Name" />
+      <TextField fx:id="nodeName" layoutX="14.0" layoutY="343.0" />
+      <Label fx:id="description" layoutX="195.0" layoutY="326.0" text="Node Description" />
+      <TextField fx:id="nodeDescription" layoutX="195.0" layoutY="343.0" />
+      <Button fx:id="genSupermap" layoutX="468.0" layoutY="322.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="122.0" text="Save SuperMap" />
+      <Button fx:id="loadMap1" layoutX="14.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Load Map 1" />
+      <ComboBox fx:id="map1Dropdown" layoutX="123.0" layoutY="35.0" prefHeight="25.0" prefWidth="37.0" />
+      <Button fx:id="loadMap2" layoutX="234.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Load Map 2" />
+      <ComboBox fx:id="map2Dropdown" layoutX="344.0" layoutY="35.0" prefHeight="25.0" prefWidth="37.0" />
+      <CheckBox fx:id="isTransitionCheckbox" layoutX="358.0" layoutY="347.0" mnemonicParsing="false" text="Transition" />
+      <Button fx:id="makeTransButton" layoutX="468.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Make Transition" />
+      <MenuButton fx:id="nodeOptions" layoutX="468.0" layoutY="91.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Node Options">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
+      <MenuButton fx:id="edgeOptions" layoutX="468.0" layoutY="208.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Edge Options">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
+      <Canvas fx:id="imageCanvas" height="200.0" layoutX="0" layoutY="80.0" width="200.0" />
+   </children>
+</Pane>
