@@ -124,8 +124,8 @@ public class MainController implements Initializable {
 	private int imageWidth = 0;
 	private int imageHeight = 0;
 	private int duplicateNode = 1;
-	private int firstNodeLoc = 0;
-	private int secondNodeLoc =  0;
+	private int firstNodeLoc = -1;
+	private int secondNodeLoc =  -1;
 	public static boolean mapLoaded = false;
 	private volatile int numberClicks = 0;
 	private boolean doOnce = true;
@@ -198,8 +198,9 @@ public class MainController implements Initializable {
 									if(mapNodes.size() ==0){
 										Node node = new Node("node",(int)event.getX()-5,(int)event.getY()-5,0,nodeMapName,"");
 										mapNodes.add(node);
-										gc.setFill(Color.RED);
-										gc.fillOval(event.getX()-5, event.getY()-5, 10, 10);
+										clearCanvas();
+										renderEdges();
+										renderNodes();
 										System.out.println(mapNodes);
 
 										doOnce = false;
@@ -257,6 +258,8 @@ public class MainController implements Initializable {
 				shouldDeleteEdge = false;
 				shouldDeleteNode = true;
 				shouldAddNode = false;
+				
+				
 				nodeOptions.setText("Deleting Node");
 
 				if(shouldDeleteNode){
@@ -267,7 +270,6 @@ public class MainController implements Initializable {
 							if(shouldDeleteNode){
 								System.out.println("In Delete");
 
-								shouldAddNode = false;
 
 
 
@@ -488,10 +490,13 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event arg0) {
+				shouldDeleteEdge = false;
 				shouldAddEdge = true;
 				shouldAddNode = false;
 				shouldDeleteNode = false;
 				shouldDeleteEdge = false;
+				oneSelected = false;
+				twoSelected = false;
 				shouldShowEdges = false;
 				edgeOptions.setText("Adding Edge");
 				nodeOptions.setText("Node Options");
@@ -519,6 +524,8 @@ public class MainController implements Initializable {
 											numberClicks += 1;
 											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 											//gc.clearRect(event.getX()-5, event.getY()-5, 30, 30);
+											//clearCanvas();
+											renderNodes();
 											gc.setFill(Color.GOLD);
 											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
 											gc.setFill(Color.RED);
@@ -534,7 +541,8 @@ public class MainController implements Initializable {
 											numberClicks = 2;
 											shouldMakeEdge = true;
 											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-
+											//clearCanvas();
+											renderNodes();
 											gc.setFill(Color.GOLD);
 											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
 											gc.setFill(Color.RED);
@@ -544,7 +552,7 @@ public class MainController implements Initializable {
 								}
 							}
 
-							if(shouldMakeEdge && firstNodeLoc != secondNodeLoc){
+							if(shouldMakeEdge && firstNodeLoc != secondNodeLoc &&firstNodeLoc!=-1 && secondNodeLoc!=-1){
 								shouldMakeEdge = false;
 
 								System.out.println("Making an edge at " +firstNodeLoc + " "+secondNodeLoc);
@@ -556,16 +564,15 @@ public class MainController implements Initializable {
 									edgeNodes.add(mapNodes.get(secondNodeLoc));
 									System.out.println(mapNodes.get(firstNodeLoc).neighbors);
 									GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-									gc.setFill(Color.WHEAT);
-									gc.strokeLine(mapNodes.get(firstNodeLoc).xPos+5, mapNodes.get(firstNodeLoc).yPos+5, mapNodes.get(secondNodeLoc).xPos+5, mapNodes.get(secondNodeLoc).yPos+5);
-									gc.setFill(Color.RED);
-									gc.fillOval((double)mapNodes.get(firstNodeLoc).xPos,(double)mapNodes.get(firstNodeLoc).yPos, 10, 10);
-									gc.fillOval((double)mapNodes.get(secondNodeLoc).xPos,(double)mapNodes.get(secondNodeLoc).yPos, 10, 10);
+									renderEdges();
+									renderNodes();
 
 								}
-								firstNodeLoc = 0;
-								secondNodeLoc = 0;
+								firstNodeLoc = -1;
+								secondNodeLoc = -1;
 								numberClicks = 0;
+								shouldMakeEdge = false;
+								renderNodes();
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
@@ -573,9 +580,21 @@ public class MainController implements Initializable {
 								System.out.println("RESTARTING");
 
 							} else {
-								numberClicks = 1;
-								secondNodeLoc = 0;
-								shouldMakeEdge = false;
+								
+								if(firstNodeLoc == -1){
+									System.out.println("Fucked up1");
+									numberClicks = 0;
+									//firstNodeLoc = 0;
+									renderNodes();
+									shouldMakeEdge = false;
+								} else {
+									System.out.println("Fucked up2");
+									numberClicks = 1;
+									secondNodeLoc = 0;
+//									/renderNodes();
+									shouldMakeEdge = false;
+								}
+								
 							}
 
 
@@ -623,16 +642,17 @@ public class MainController implements Initializable {
 		});
 
 		deleteEdge.setOnAction(new EventHandler(){
-
 			@Override
 			public void handle(Event arg0){
+				shouldDeleteEdge = true;
 				System.out.println("Starting event handler for delete");
+				firstNodeLoc = 0;
+				secondNodeLoc = 0;
 				oneSelected = false;
 				twoSelected = false;
 				shouldAddEdge = false;
 				shouldAddNode = false;
 				shouldDeleteNode = false;
-				shouldDeleteEdge = true;
 				shouldShowEdges = false;
 				edgeOptions.setText("Deleting Edge");
 				nodeOptions.setText("Node Options");
@@ -641,7 +661,7 @@ public class MainController implements Initializable {
 
 
 				if(shouldDeleteEdge){
-
+					if(shouldDeleteEdge){
 
 					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 						@Override
@@ -656,6 +676,11 @@ public class MainController implements Initializable {
 										System.out.println("CLICKED THE FIRST NODE");
 										oneSelected = true;
 										firstNodeLoc = i;
+										GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+										gc.setFill(Color.GOLD);
+										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
+										gc.setFill(Color.RED);
+										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
 										break;
 										//									firstNodeLoc = i;
 										//									numberClicks =2;
@@ -674,6 +699,11 @@ public class MainController implements Initializable {
 									if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
 										System.out.println("CLICKED THE SECOND NODE");
 										twoSelected = true;
+										GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+										gc.setFill(Color.GOLD);
+										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
+										gc.setFill(Color.RED);
+										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
 										secondNodeLoc = i;
 										break;
 									}
@@ -690,14 +720,18 @@ public class MainController implements Initializable {
 									clearCanvas();
 									renderEdges();
 									renderNodes();
+									
 									System.out.println(mapNodes.get(firstNodeLoc).neighbors);
 								}
+								firstNodeLoc = 0;
+								secondNodeLoc = 0;
 							}
-
-
+						
+						
 						}
-
-					});		
+						
+					});	
+					}
 				} 
 
 
