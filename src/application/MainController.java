@@ -204,7 +204,7 @@ public class MainController implements Initializable {
 								if(doOnce){
 									if(mapNodes.size() ==0){
 										System.out.println("Creating new node at " +event.getX()+" "+event.getY());
-										Node node = new Node("node",(int)event.getX()-5,(int)event.getY()-5,0,nodeMapName,"");
+										Node node = new Node("node",(int)event.getX()-15,(int)event.getY()-15,0,nodeMapName,"");
 										mapNodes.add(node);
 										clearCanvas();
 										renderEverything();
@@ -231,7 +231,7 @@ public class MainController implements Initializable {
 								}
 								if(duplicateNode == 0){
 									System.out.println("In duplicate node");
-									Node node = new Node("node",(int)event.getX()-5,(int)event.getY()-5,0,nodeMapName,"");
+									Node node = new Node("node",(int)event.getX()-15,(int)event.getY()-15,0,nodeMapName,"");
 									mapNodes.add(node);
 									renderEverything();
 									System.out.println(mapNodes);
@@ -396,7 +396,7 @@ public class MainController implements Initializable {
 								gc.setFill(Color.GOLD);
 								gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 								gc.setFill(Color.RED);
-								gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
+								gc.fillOval((double)mapNodes.get(i).xPos+4,(double)mapNodes.get(i).yPos+4, 22, 22);
 							}
 						}
 					}
@@ -562,7 +562,7 @@ public class MainController implements Initializable {
 											gc.setFill(Color.GOLD);
 											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 											gc.setFill(Color.RED);
-											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
+											gc.fillOval((double)mapNodes.get(i).xPos+4,(double)mapNodes.get(i).yPos+4, 22, 22);
 
 										} 
 									}
@@ -579,7 +579,7 @@ public class MainController implements Initializable {
 											gc.setFill(Color.GOLD);
 											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 											gc.setFill(Color.RED);
-											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
+											gc.fillOval((double)mapNodes.get(i).xPos+4,(double)mapNodes.get(i).yPos+4, 22, 22);
 										} 
 									}
 								}
@@ -734,7 +734,7 @@ public class MainController implements Initializable {
 										gc.setFill(Color.GOLD);
 										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 										gc.setFill(Color.RED);
-										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
+										gc.fillOval((double)mapNodes.get(i).xPos+4,(double)mapNodes.get(i).yPos+4, 22, 22);
 										break;
 										//									firstNodeLoc = i;
 										//									numberClicks =2;
@@ -757,7 +757,7 @@ public class MainController implements Initializable {
 										gc.setFill(Color.GOLD);
 										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 										gc.setFill(Color.RED);
-										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22,22);
+										gc.fillOval((double)mapNodes.get(i).xPos+4,(double)mapNodes.get(i).yPos+4, 22,22);
 										secondNodeLoc = i;
 										break;
 									}
