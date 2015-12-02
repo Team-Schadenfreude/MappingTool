@@ -3,6 +3,7 @@ package application;
 Alonso
  */
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -24,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
+import com.sun.javafx.tk.Toolkit;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -427,7 +429,7 @@ public class MainController implements Initializable {
 
 						mapView.setImage(image);
 
-
+					
 
 						loadMap1.setText(selectedFile.getName());
 						imageWidth = (int) image.getWidth();
@@ -439,10 +441,7 @@ public class MainController implements Initializable {
 						System.out.println(imageWidth);
 						//nodeOptions.setLayoutX(1020);
 						//	edgeOptions.setLayoutX(1020);
-						nodeName.setLayoutY(550);
-						nodeDescription.setLayoutY(550);
 						mapNodes.clear();
-						name.setLayoutY(nodeName.getLayoutY()-17);
 
 
 						description.setLayoutY(nodeDescription.getLayoutY()-17);
@@ -466,7 +465,6 @@ public class MainController implements Initializable {
 						scrollImage.setPrefHeight(900);
 						scrollImage.setPrefWidth(1950);
 
-
 						scrollImage.autosize();
 
 
@@ -477,6 +475,13 @@ public class MainController implements Initializable {
 						mapLoaded = true;
 						nodeOptions.setLayoutX(scrollImage.getWidth()-935);
 						edgeOptions.setLayoutX(scrollImage.getWidth()-935);
+						genSupermap.setLayoutX(scrollImage.getWidth()-935);
+						genSupermap.setLayoutY(scrollImage.getHeight()-370);
+
+						nodeName.setLayoutY(scrollImage.getHeight()-335);
+						nodeDescription.setLayoutY(scrollImage.getHeight()-335);
+						name.setLayoutY(nodeName.getLayoutY()-17);
+						edgeOptions.setLayoutY(280);
 						System.out.println("************");
 						System.out.println(nodeOptions.getLayoutX());
 						System.out.println("************");
@@ -484,8 +489,8 @@ public class MainController implements Initializable {
 
 						Main.primaryStage.setWidth(1175);
 						Main.primaryStage.setHeight(650);
-						Main.primaryStage.centerOnScreen();
 						renderEverything();
+						Main.primaryStage.centerOnScreen();
 
 					} catch (IOException ex) {
 						ex.printStackTrace();
@@ -1121,6 +1126,9 @@ public class MainController implements Initializable {
 
 
 	private void checkForTransNodes(List<Node> mapNodesNumber,List<Node>transNodeStore){
+		
+		transNodeStore.clear();
+		
 		for(Node n: mapNodesNumber){
 			if(n.isTransitionNode == true){
 				transNodeStore.add(n);
