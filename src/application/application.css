@@ -100,6 +100,11 @@
         
 }
 
+.combo-box-popup .list-view .list-cell {
+	            -fx-text-fill: white;
+	
+}
+
 .combo-box-popup .list-cell {
 	-fx-background-color: 
         #000000,
@@ -110,10 +115,77 @@
         
 }
 
+.combo-box-base{
+	            -fx-text-fill: white;
+	
+}
+
+.combo-box .text-field{
+		            -fx-text-fill: white;
+	
+}
+.combo-box-base:showing {
+	            -fx-text-fill: white;
+	
+}
 .combo-box-popup .list-view .list-cell:filled:hover 
 {
 	-fx-background-color: #053d57;
             -fx-text-fill: white;
 }
 
+.text-field {
+    -fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+        -fx-background-insets: 0,1,2,3;
+                    -fx-text-fill: white;
+        
+}
+
+.text-field:focused {
+     -fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+        -fx-background-insets: 0,1,2,3;
+                    -fx-text-fill: white;
+        
+}
+.check-box{
+                          -fx-text-fill: white;
+}
+        
+        .check-box .box{
+ 		-fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+        -fx-background-insets: 0,1,2,3;
+        
+}
+
+.combo-box .cell{
+                          -fx-text-fill: white;
+
+}
+
+
+.label{
+	                    -fx-text-fill: white;
+	
+}
+.combo-box .text-field:focused{
+		                    -fx-text-fill: white;
+	
+}
+
+.combo-box-popup .list-cell {
+			                    -fx-text-fill: white;
+	
+}
 
