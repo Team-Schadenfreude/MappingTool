@@ -41,12 +41,16 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
+import javafx.scene.transform.Scale;
 
 public class MainController implements Initializable {
 
@@ -80,6 +84,7 @@ public class MainController implements Initializable {
 	@FXML
 	private TextField nodeDescription = new TextField();
 
+	StackPane stack = new StackPane();
 	@FXML
 	private Canvas imageCanvas = new Canvas();
 
@@ -103,6 +108,9 @@ public class MainController implements Initializable {
 	private MenuItem deleteNode = new MenuItem("Delete Node");
 	@FXML
 	private Button loadMap2 = new Button();
+
+		@FXML
+	    private ScrollPane scrollImage = new ScrollPane();
 
 	@FXML
 	private ComboBox<Node> map2Dropdown = new ComboBox();
@@ -164,7 +172,6 @@ public class MainController implements Initializable {
 
 		});
 
-
 		addNode.setOnAction(new EventHandler(){
 
 			@Override
@@ -178,7 +185,6 @@ public class MainController implements Initializable {
 				nodeOptions.setText("Adding Node");
 				edgeOptions.setText("Edge Options");
 				if(shouldAddNode){
-					imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED,this);
 					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent event) {
@@ -186,16 +192,18 @@ public class MainController implements Initializable {
 								System.out.println("In Add");
 								System.out.println(mapNodes);
 								shouldDeleteNode = false;
-								System.out.println(event.getX());
+								System.out.println("GetSceneCoords");
 								System.out.println(event.getY());
-								event.getX();
-								event.getY();
-								event.consume();
+								System.out.println(event.getX());
+								System.out.println("GetSceneCoords");
+
+
 
 								GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 								//imageCanvas.getGraphicsContext2D().clearRect(0, 0, imageCanvas.getWidth(), imageCanvas.getHeight());
 								if(doOnce){
 									if(mapNodes.size() ==0){
+										System.out.println("Creating new node at " +event.getX()+" "+event.getY());
 										Node node = new Node("node",(int)event.getX()-5,(int)event.getY()-5,0,nodeMapName,"");
 										mapNodes.add(node);
 										clearCanvas();
@@ -282,6 +290,8 @@ public class MainController implements Initializable {
 										clearCanvas();
 										renderEverything();
 										System.out.println(mapNodes);
+									} else {
+										System.out.println("Missed bitch");
 									}
 								}
 
@@ -415,12 +425,15 @@ public class MainController implements Initializable {
 						clearCanvas();
 						img = ImageIO.read(new File(Paths.get(path+"map.png").toString()));
 						image = SwingFXUtils.toFXImage(img, null);
+						mapView.setImage(image);
+						
+						
 						loadMap1.setText(selectedFile.getName());
 						imageWidth = (int) image.getWidth();
 						imageHeight = (int) image.getHeight();
-						mapView.setFitHeight(440);
-						mapView.setFitWidth(1000);
-						mapView.setImage(image);
+						//mapView.setFitHeight(440);
+					///	mapView.setFitWidth(1000);
+					//	mapView.setImage(image);
 						System.out.println(imageWidth);
 						nodeOptions.setLayoutX(1020);
 						edgeOptions.setLayoutX(1020);
@@ -428,8 +441,8 @@ public class MainController implements Initializable {
 						nodeDescription.setLayoutY(550);
 						mapNodes.clear();
 						name.setLayoutY(nodeName.getLayoutY()-17);
-						imageCanvas.setWidth(mapView.getFitWidth());
-						imageCanvas.setHeight(mapView.getFitHeight());
+						
+
 						description.setLayoutY(nodeDescription.getLayoutY()-17);
 						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY()+4);						
 						genSupermap.setLayoutX(1020);
@@ -438,13 +451,26 @@ public class MainController implements Initializable {
 						checkForTransNodes(mapNodes,map1TransitionNodes);
 						connectEdgesFromFile(mapNodes,Paths.get(path+"mapEdges.csv").toString());
 						map1Dropdown.setItems(FXCollections.observableArrayList(map1TransitionNodes));
-						renderEverything();
+						stack.getChildren().addAll(mapView,imageCanvas);
+						//stack.getChildren().addAll(imageCanvas,mapView);
+						stack.getTransforms().add(new Scale(.5,.5));
+						scrollImage.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+						scrollImage.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+						scrollImage.setPrefSize(1000, 600);
+						scrollImage.setContent(stack);
+						
+						imageCanvas.setWidth(img.getWidth());
+						imageCanvas.setHeight(img.getHeight());
+
+						System.out.println(imageCanvas.getWidth());
+						System.out.println(imageCanvas.getHeight());
 
 
 						mapLoaded = true;
 						Main.primaryStage.setWidth(1175);
 						Main.primaryStage.setHeight(650);
 						Main.primaryStage.centerOnScreen();
+						renderEverything();
 
 					} catch (IOException ex) {
 						ex.printStackTrace();
@@ -480,10 +506,11 @@ public class MainController implements Initializable {
 						ex.printStackTrace();
 					}
 				}
-
 			}
 
 		});
+
+
 
 		addEdge.setOnAction(new EventHandler(){
 
@@ -501,22 +528,6 @@ public class MainController implements Initializable {
 				nodeOptions.setText("Node Options");
 				numberClicks = 0;
 				if(shouldAddEdge){
-
-					
-					
-					 EventHandler<MouseEvent> keyEventHandler =
-						        new EventHandler<MouseEvent>() {
-						           
-									@Override
-									public void handle(MouseEvent event) {
-										// TODO Auto-generated method stub
-										System.out.println("Hey");
-									}	
-						        };
-					
-					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEventHandler);
-					
-					
 					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent event) {
@@ -599,7 +610,7 @@ public class MainController implements Initializable {
 								System.out.println("RESTARTING");
 								imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 
-								
+
 							} else {
 
 								if(firstNodeLoc == -1){
@@ -940,7 +951,7 @@ public class MainController implements Initializable {
 				//System.out.println(n2.map);
 				System.out.println("********************");
 
-				
+
 				if(n1 != null&& n2 !=null){
 					if (n1.neighbors == null)
 					{
@@ -957,7 +968,7 @@ public class MainController implements Initializable {
 				}
 			}
 
-			
+
 
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
@@ -1160,20 +1171,21 @@ public class MainController implements Initializable {
 	protected void renderTransitionNodes(){
 		for(Node n: mapNodes){
 			if(n.isTransitionNode == true){
-			GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-			gc.setFill(Color.BLUE);
-			gc.fillRect(n.xPos-.75,n.yPos-.75,12,12);
-			gc.setFill(Color.WHITE);
-			gc.fillOval(n.xPos+1.5, n.yPos+1.5, 7.5, 7.5);
+				GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+				gc.setFill(Color.BLUE);
+				gc.fillRect(n.xPos-.75,n.yPos-.75,12,12);
+				gc.setFill(Color.WHITE);
+				gc.fillOval(n.xPos+1.5, n.yPos+1.5, 7.5, 7.5);
 			}
 		}
 
 
 	}
-	
+
 	public void renderEverything(){
 		renderEdges();
 		renderNodes();
+		System.out.println("Hi");
 		renderTransitionNodes();
 	}
 
