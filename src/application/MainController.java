@@ -396,7 +396,7 @@ public class MainController implements Initializable {
 								gc.setFill(Color.GOLD);
 								gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 								gc.setFill(Color.RED);
-								gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 27, 27);
+								gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
 							}
 						}
 					}
@@ -562,7 +562,7 @@ public class MainController implements Initializable {
 											gc.setFill(Color.GOLD);
 											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 											gc.setFill(Color.RED);
-											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 27, 27);
+											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
 
 										} 
 									}
@@ -577,9 +577,9 @@ public class MainController implements Initializable {
 											//clearCanvas();
 											renderEverything();
 											gc.setFill(Color.GOLD);
-											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
+											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 											gc.setFill(Color.RED);
-											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
+											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
 										} 
 									}
 								}
@@ -734,7 +734,7 @@ public class MainController implements Initializable {
 										gc.setFill(Color.GOLD);
 										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 										gc.setFill(Color.RED);
-										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 27, 27);
+										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22, 22);
 										break;
 										//									firstNodeLoc = i;
 										//									numberClicks =2;
@@ -755,9 +755,9 @@ public class MainController implements Initializable {
 										twoSelected = true;
 										GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 										gc.setFill(Color.GOLD);
-										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
+										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 										gc.setFill(Color.RED);
-										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
+										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 22,22);
 										secondNodeLoc = i;
 										break;
 									}
@@ -919,11 +919,12 @@ public class MainController implements Initializable {
 		for(int i = 0; i < mapNodes.size()-1;i++){
 			for(int j = 0; j <mapNodes.get(i).neighbors.size();j++){
 
-				int x1 = mapNodes.get(i).xPos+5;
-				int y1 = mapNodes.get(i).yPos+5;
-				int x2 = mapNodes.get(i).neighbors.get(j).xPos+5;
-				int y2 = mapNodes.get(i).neighbors.get(j).yPos+5;
-				gc.setFill(Color.WHITE);
+				int x1 = mapNodes.get(i).xPos+15;
+				int y1 = mapNodes.get(i).yPos+15;
+				int x2 = mapNodes.get(i).neighbors.get(j).xPos+15;
+				int y2 = mapNodes.get(i).neighbors.get(j).yPos+15;
+    			gc.setLineWidth(4);
+    			gc.setStroke(Color.BLUE);
 				gc.strokeLine(x1, y1, x2, y2);
 			}
 
@@ -1181,9 +1182,9 @@ public class MainController implements Initializable {
 			if(n.isTransitionNode == true){
 				GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 				gc.setFill(Color.BLUE);
-				gc.fillRect(n.xPos-.75,n.yPos-.75,12,12);
+				gc.fillRect(n.xPos-.75,n.yPos-.75,40,40);
 				gc.setFill(Color.WHITE);
-				gc.fillOval(n.xPos+1.5, n.yPos+1.5, 7.5, 7.5);
+				gc.fillOval(n.xPos+4, n.yPos+4, 30, 30);
 			}
 		}
 
