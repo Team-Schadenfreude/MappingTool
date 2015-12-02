@@ -216,7 +216,7 @@ public class MainController implements Initializable {
 								} else{
 
 									for(int i = 0; i < mapNodes.size();i++){
-										if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
+										if(mapNodes.get(i).xPos >=event.getX()-5-30&& mapNodes.get(i).xPos <=event.getX()-5+30 && mapNodes.get(i).yPos>=event.getY()-5-30 && mapNodes.get(i).yPos<=event.getY()-5+30){
 											System.out.println("Node already exists here");
 											System.out.println("********1**********");
 											System.out.println(mapNodes.get(i).xPos);
@@ -233,8 +233,7 @@ public class MainController implements Initializable {
 									System.out.println("In duplicate node");
 									Node node = new Node("node",(int)event.getX()-5,(int)event.getY()-5,0,nodeMapName,"");
 									mapNodes.add(node);
-									gc.setFill(Color.RED);
-									gc.fillOval(event.getX()-5, event.getY()-5, 10, 10);
+									renderEverything();
 									System.out.println(mapNodes);
 								} else {
 									duplicateNode = 0;
@@ -283,7 +282,7 @@ public class MainController implements Initializable {
 
 								System.out.println("Trying to delete");
 								for(int i = 0; i < mapNodes.size();i++){
-									if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
+									if(mapNodes.get(i).xPos >=event.getX()-5-30&& mapNodes.get(i).xPos <=event.getX()-5+30 && mapNodes.get(i).yPos>=event.getY()-5-30 && mapNodes.get(i).yPos<=event.getY()-5+30){
 										System.out.println("Node already exists here");
 										fixEdges(mapNodes.get(i));
 										mapNodes.remove(i);
@@ -381,7 +380,7 @@ public class MainController implements Initializable {
 						nodeName.setStyle(null);
 						nodeDescription.setStyle(null);
 						for(int i = 0; i < mapNodes.size();i++){
-							if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
+							if(mapNodes.get(i).xPos >=event.getX()-5-30&& mapNodes.get(i).xPos <=event.getX()-5+30 && mapNodes.get(i).yPos>=event.getY()-5-30 && mapNodes.get(i).yPos<=event.getY()-5+30){
 								System.out.println("Clicked a node");
 								System.out.println(mapNodes.get(i).nodeName);
 								showNodeData();
@@ -395,9 +394,9 @@ public class MainController implements Initializable {
 								}
 								GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 								gc.setFill(Color.GOLD);
-								gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
+								gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 								gc.setFill(Color.RED);
-								gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
+								gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 27, 27);
 							}
 						}
 					}
@@ -552,7 +551,7 @@ public class MainController implements Initializable {
 								System.out.println("Trying to add edge");
 								if(numberClicks == 0){
 									for(int i = 0; i < mapNodes.size();i++){
-										if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
+										if(mapNodes.get(i).xPos >=event.getX()-5-30&& mapNodes.get(i).xPos <=event.getX()-5+30 && mapNodes.get(i).yPos>=event.getY()-5-30 && mapNodes.get(i).yPos<=event.getY()-5+30){
 											System.out.println("CLICKED THE FIRST NODE");
 											firstNodeLoc = i;
 											numberClicks += 1;
@@ -561,15 +560,15 @@ public class MainController implements Initializable {
 											//clearCanvas();
 											renderEverything();
 											gc.setFill(Color.GOLD);
-											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
+											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 											gc.setFill(Color.RED);
-											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
+											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 27, 27);
 
 										} 
 									}
 								} else if(numberClicks != 0){
 									for(int i = 0; i < mapNodes.size();i++){
-										if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
+										if(mapNodes.get(i).xPos >=event.getX()-5-30&& mapNodes.get(i).xPos <=event.getX()-5+30 && mapNodes.get(i).yPos>=event.getY()-5-30 && mapNodes.get(i).yPos<=event.getY()-5+30){
 											System.out.println("CLICKED THE SECOND NODE");
 											secondNodeLoc = i;
 											numberClicks = 2;
@@ -727,15 +726,15 @@ public class MainController implements Initializable {
 
 							if(oneSelected == false){
 								for(int i = 0; i < mapNodes.size();i++){
-									if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
+									if(mapNodes.get(i).xPos >=event.getX()-5-30&& mapNodes.get(i).xPos <=event.getX()-5+30 && mapNodes.get(i).yPos>=event.getY()-5-30 && mapNodes.get(i).yPos<=event.getY()-5+30){
 										System.out.println("CLICKED THE FIRST NODE");
 										oneSelected = true;
 										firstNodeLoc = i;
 										GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 										gc.setFill(Color.GOLD);
-										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
+										gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 30, 30);
 										gc.setFill(Color.RED);
-										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
+										gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 27, 27);
 										break;
 										//									firstNodeLoc = i;
 										//									numberClicks =2;
@@ -751,7 +750,7 @@ public class MainController implements Initializable {
 								System.out.println(twoSelected);
 							} else if(oneSelected){
 								for(int i = 0; i < mapNodes.size();i++){
-									if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
+									if(mapNodes.get(i).xPos >=event.getX()-5-30&& mapNodes.get(i).xPos <=event.getX()-5+30 && mapNodes.get(i).yPos>=event.getY()-5-30 && mapNodes.get(i).yPos<=event.getY()-5+30){
 										System.out.println("CLICKED THE SECOND NODE");
 										twoSelected = true;
 										GraphicsContext gc = imageCanvas.getGraphicsContext2D();
@@ -842,7 +841,7 @@ public class MainController implements Initializable {
 		for(Node n: mapNodes){
 			GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 			gc.setFill(Color.RED);
-			gc.fillOval(n.xPos, n.yPos, 10, 10);
+			gc.fillOval(n.xPos, n.yPos, 30, 30);
 		}
 
 
