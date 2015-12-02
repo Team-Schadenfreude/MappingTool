@@ -444,8 +444,6 @@ public class MainController implements Initializable {
 						mapNodes.clear();
 
 
-						description.setLayoutY(nodeDescription.getLayoutY()-17);
-						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY()+4);						
 						genSupermap.setLayoutX(1020);
 						genSupermap.setLayoutY(nodeName.getLayoutY()-21);
 						getNodesFromFile1(Paths.get(path+"mapNodes.csv").toString());
@@ -482,9 +480,12 @@ public class MainController implements Initializable {
 						nodeDescription.setLayoutY(scrollImage.getHeight()-335);
 						name.setLayoutY(nodeName.getLayoutY()-17);
 						edgeOptions.setLayoutY(280);
+						description.setLayoutY(nodeDescription.getLayoutY()-17);
+
 						System.out.println("************");
 						System.out.println(nodeOptions.getLayoutX());
 						System.out.println("************");
+						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY()+4);						
 
 
 						Main.primaryStage.setWidth(1175);
