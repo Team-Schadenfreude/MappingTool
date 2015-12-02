@@ -109,8 +109,8 @@ public class MainController implements Initializable {
 	@FXML
 	private Button loadMap2 = new Button();
 
-		@FXML
-	    private ScrollPane scrollImage = new ScrollPane();
+	@FXML
+	private ScrollPane scrollImage = new ScrollPane();
 
 	@FXML
 	private ComboBox<Node> map2Dropdown = new ComboBox();
@@ -176,7 +176,7 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-				
+
 				shouldAddEdge = false;
 				shouldDeleteEdge = false;
 				shouldShowEdges = false;
@@ -424,26 +424,26 @@ public class MainController implements Initializable {
 						clearCanvas();
 						img = ImageIO.read(new File(Paths.get(path+"map.png").toString()));
 						image = SwingFXUtils.toFXImage(img, null);
-						
-						mapView.setImage(image);
-						
 
-						
+						mapView.setImage(image);
+
+
+
 						loadMap1.setText(selectedFile.getName());
 						imageWidth = (int) image.getWidth();
 						imageHeight = (int) image.getHeight();
 						//mapView.setFitHeight(440);
-					///	mapView.setFitWidth(1000);
-					//	mapView.setImage(image);
-						
+						///	mapView.setFitWidth(1000);
+						//	mapView.setImage(image);
+
 						System.out.println(imageWidth);
-						nodeOptions.setLayoutX(1020);
-						edgeOptions.setLayoutX(1020);
+						//nodeOptions.setLayoutX(1020);
+						//	edgeOptions.setLayoutX(1020);
 						nodeName.setLayoutY(550);
 						nodeDescription.setLayoutY(550);
 						mapNodes.clear();
 						name.setLayoutY(nodeName.getLayoutY()-17);
-						
+
 
 						description.setLayoutY(nodeDescription.getLayoutY()-17);
 						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY()+4);						
@@ -469,12 +469,19 @@ public class MainController implements Initializable {
 
 						scrollImage.autosize();
 
-						
-						
+
+
 
 
 
 						mapLoaded = true;
+						nodeOptions.setLayoutX(scrollImage.getWidth()-700);
+						edgeOptions.setLayoutX(scrollImage.getWidth()-700);
+						System.out.println("************");
+						System.out.println(nodeOptions.getLayoutX());
+						System.out.println("************");
+
+
 						Main.primaryStage.setWidth(1175);
 						Main.primaryStage.setHeight(650);
 						Main.primaryStage.centerOnScreen();
@@ -923,8 +930,8 @@ public class MainController implements Initializable {
 				int y1 = mapNodes.get(i).yPos+15;
 				int x2 = mapNodes.get(i).neighbors.get(j).xPos+15;
 				int y2 = mapNodes.get(i).neighbors.get(j).yPos+15;
-    			gc.setLineWidth(4);
-    			gc.setStroke(Color.BLUE);
+				gc.setLineWidth(4);
+				gc.setStroke(Color.BLUE);
 				gc.strokeLine(x1, y1, x2, y2);
 			}
 
