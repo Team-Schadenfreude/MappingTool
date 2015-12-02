@@ -425,8 +425,10 @@ public class MainController implements Initializable {
 						clearCanvas();
 						img = ImageIO.read(new File(Paths.get(path+"map.png").toString()));
 						image = SwingFXUtils.toFXImage(img, null);
+						
 						mapView.setImage(image);
 						
+
 						
 						loadMap1.setText(selectedFile.getName());
 						imageWidth = (int) image.getWidth();
@@ -434,6 +436,7 @@ public class MainController implements Initializable {
 						//mapView.setFitHeight(440);
 					///	mapView.setFitWidth(1000);
 					//	mapView.setImage(image);
+						
 						System.out.println(imageWidth);
 						nodeOptions.setLayoutX(1020);
 						edgeOptions.setLayoutX(1020);
@@ -451,19 +454,25 @@ public class MainController implements Initializable {
 						checkForTransNodes(mapNodes,map1TransitionNodes);
 						connectEdgesFromFile(mapNodes,Paths.get(path+"mapEdges.csv").toString());
 						map1Dropdown.setItems(FXCollections.observableArrayList(map1TransitionNodes));
+						imageCanvas.setHeight(img.getHeight());
+						imageCanvas.setWidth(img.getWidth());
+
 						stack.getChildren().addAll(mapView,imageCanvas);
 						//stack.getChildren().addAll(imageCanvas,mapView);
-						stack.getTransforms().add(new Scale(.5,.5));
+						scrollImage.getTransforms().add(new Scale(.5,.5));
+
 						scrollImage.setHbarPolicy(ScrollBarPolicy.ALWAYS);
 						scrollImage.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-						scrollImage.setPrefSize(1000, 600);
 						scrollImage.setContent(stack);
-						
-						imageCanvas.setWidth(img.getWidth());
-						imageCanvas.setHeight(img.getHeight());
+						scrollImage.setPrefHeight(800);
+						scrollImage.setPrefWidth(1500);
 
-						System.out.println(imageCanvas.getWidth());
-						System.out.println(imageCanvas.getHeight());
+
+						scrollImage.autosize();
+
+						
+						
+
 
 
 						mapLoaded = true;
