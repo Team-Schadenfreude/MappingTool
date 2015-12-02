@@ -502,6 +502,21 @@ public class MainController implements Initializable {
 				numberClicks = 0;
 				if(shouldAddEdge){
 
+					
+					
+					 EventHandler<MouseEvent> keyEventHandler =
+						        new EventHandler<MouseEvent>() {
+						           
+									@Override
+									public void handle(MouseEvent event) {
+										// TODO Auto-generated method stub
+										System.out.println("Hey");
+									}	
+						        };
+					
+					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEventHandler);
+					
+					
 					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent event) {
