@@ -79,6 +79,17 @@ public class MainController implements Initializable {
 	@FXML
 	private Label description = new Label();
 
+    @FXML
+    private Label map1 = new Label();
+
+    @FXML
+    private Label map2 = new Label();
+
+    @FXML
+    private Label node1 = new Label();
+
+    @FXML
+    private Label node2 = new Label();
 
 	@FXML
 	private TextField nodeName = new TextField();
@@ -157,7 +168,7 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		pane.setStyle("-fx-background-color: #3E606F;");
+		pane.setStyle("-fx-background-color: #545352;");
 
 
 		nodeOptions.getItems().remove(0);
@@ -169,7 +180,6 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event arg0) {
-
 			}
 
 		});
@@ -481,13 +491,17 @@ public class MainController implements Initializable {
 						name.setLayoutY(nodeName.getLayoutY()-17);
 						edgeOptions.setLayoutY(280);
 						description.setLayoutY(nodeDescription.getLayoutY()-17);
-
 						System.out.println("************");
 						System.out.println(nodeOptions.getLayoutX());
 						System.out.println("************");
-						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY()+4);						
-
-
+						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY()+4);	
+						map1Dropdown.setPrefWidth(160);
+						loadMap2.setLayoutX(300);
+						//map2.setLayoutX(500);
+						map2.setLayoutX(loadMap2.getLayoutX());
+						map2Dropdown.setLayoutX(loadMap2.getLayoutX()+7 +loadMap2.getWidth());
+						map2Dropdown.setPrefWidth(160);
+						makeTransButton.setLayoutX(map2Dropdown.getLayoutX()+map2Dropdown.getWidth()+150);
 						Main.primaryStage.setWidth(1175);
 						Main.primaryStage.setHeight(650);
 						renderEverything();
@@ -642,7 +656,7 @@ public class MainController implements Initializable {
 								} else {
 									numberClicks = 1;
 									secondNodeLoc = 0;
-									renderEverything();
+									//renderEverything();
 									shouldMakeEdge = false;
 									shouldDeleteEdge = false;
 								}
@@ -687,7 +701,6 @@ public class MainController implements Initializable {
 				if(map1Dropdown.getSelectionModel().getSelectedItem()!=null &&map2Dropdown.getSelectionModel().getSelectedItem()!=null){
 					map1Dropdown.getSelectionModel().getSelectedItem().neighbors.add(map2Dropdown.getSelectionModel().getSelectedItem());
 					map2Dropdown.getSelectionModel().getSelectedItem().neighbors.add(map1Dropdown.getSelectionModel().getSelectedItem());
-
 					System.out.println(map1Dropdown.getSelectionModel().getSelectedItem().neighbors);
 					System.out.println(map2Dropdown.getSelectionModel().getSelectedItem().neighbors);
 
