@@ -1,1 +1,119 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.button {
+    -fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 6 15 6 15;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+#rich-blue Text {
+    -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0.0 , 0 , 1);
+}
+
+
+.button:hover{
+	-fx-background-color: #053d57
+}
+
+
+
+.menu-button .label{
+	 
+     -fx-padding: 5,5,5,5;
+ 
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+
+.menu-button {
+    -fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+   -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 3,3,3,3;
+    
+    
+}
+.context-menu{
+	-fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+        -fx-padding: 6 15 6 15;
+        -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+}
+
+.menu-item:focused{
+	-fx-background-color: #053d57;
+
+	-fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 4 4 4 4;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+.combo-box{
+	-fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+        -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 4 4 0 0;
+        -fx-text-fill: white;
+    
+}
+
+.combo-box .label{
+	-fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+            -fx-text-fill: white;
+        
+       
+}
+
+ .combo-box-popup .list-view {
+	-fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+            -fx-text-fill: white;
+        
+}
+
+.combo-box-popup .list-cell {
+	-fx-background-color: 
+        #000000,
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441),
+        linear-gradient(#193441, #193441);
+            -fx-text-fill: white;
+        
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover 
+{
+	-fx-background-color: #053d57;
+            -fx-text-fill: white;
+}
+
+
