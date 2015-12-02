@@ -157,7 +157,7 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		pane.setStyle("-fx-background-color: #205080;");
+		pane.setStyle("-fx-background-color: #3E606F;");
 
 
 		nodeOptions.getItems().remove(0);
