@@ -488,13 +488,16 @@ public class MainController implements Initializable {
 
 						nodeName.setLayoutY(scrollImage.getHeight()-335);
 						nodeDescription.setLayoutY(scrollImage.getHeight()-335);
+						nodeDescription.setLayoutX(nodeName.getLayoutX()+nodeName.getWidth()+20);
 						name.setLayoutY(nodeName.getLayoutY()-17);
 						edgeOptions.setLayoutY(280);
 						description.setLayoutY(nodeDescription.getLayoutY()-17);
+						description.setLayoutX(nodeDescription.getLayoutX());
 						System.out.println("************");
 						System.out.println(nodeOptions.getLayoutX());
 						System.out.println("************");
 						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY()+4);	
+						isTransitionCheckbox.setLayoutX(nodeDescription.getLayoutX()+nodeDescription.getWidth()+5);
 						map1Dropdown.setPrefWidth(160);
 						loadMap2.setLayoutX(300);
 						//map2.setLayoutX(500);
@@ -506,7 +509,7 @@ public class MainController implements Initializable {
 						Main.primaryStage.setHeight(650);
 						renderEverything();
 						Main.primaryStage.centerOnScreen();
-
+						node2.setLayoutX(map2Dropdown.getLayoutX());
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
