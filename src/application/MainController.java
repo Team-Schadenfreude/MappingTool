@@ -463,8 +463,8 @@ public class MainController implements Initializable {
 						scrollImage.setHbarPolicy(ScrollBarPolicy.ALWAYS);
 						scrollImage.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 						scrollImage.setContent(stack);
-						scrollImage.setPrefHeight(800);
-						scrollImage.setPrefWidth(1500);
+						scrollImage.setPrefHeight(900);
+						scrollImage.setPrefWidth(1950);
 
 
 						scrollImage.autosize();
@@ -475,8 +475,8 @@ public class MainController implements Initializable {
 
 
 						mapLoaded = true;
-						nodeOptions.setLayoutX(scrollImage.getWidth()-700);
-						edgeOptions.setLayoutX(scrollImage.getWidth()-700);
+						nodeOptions.setLayoutX(scrollImage.getWidth()-935);
+						edgeOptions.setLayoutX(scrollImage.getWidth()-935);
 						System.out.println("************");
 						System.out.println(nodeOptions.getLayoutX());
 						System.out.println("************");
