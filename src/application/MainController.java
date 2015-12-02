@@ -524,7 +524,7 @@ public class MainController implements Initializable {
 											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 											//gc.clearRect(event.getX()-5, event.getY()-5, 30, 30);
 											//clearCanvas();
-											renderNodes();
+											renderEverything();
 											gc.setFill(Color.GOLD);
 											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
 											gc.setFill(Color.RED);
@@ -541,7 +541,7 @@ public class MainController implements Initializable {
 											shouldMakeEdge = true;
 											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 											//clearCanvas();
-											renderNodes();
+											renderEverything();
 											gc.setFill(Color.GOLD);
 											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
 											gc.setFill(Color.RED);
@@ -573,7 +573,7 @@ public class MainController implements Initializable {
 								secondNodeLoc = -1;
 								numberClicks = 0;
 								shouldMakeEdge = false;
-								renderNodes();
+								renderEverything();
 								shouldDeleteEdge = false;
 								oneSelected = false;
 								twoSelected = false;
@@ -582,8 +582,9 @@ public class MainController implements Initializable {
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
+								imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 
-
+								
 							} else {
 
 								if(firstNodeLoc == -1){
@@ -594,7 +595,7 @@ public class MainController implements Initializable {
 								} else {
 									numberClicks = 1;
 									secondNodeLoc = 0;
-									renderNodes();
+									renderEverything();
 									shouldMakeEdge = false;
 									shouldDeleteEdge = false;
 								}
