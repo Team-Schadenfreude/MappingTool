@@ -489,9 +489,9 @@ public class MainController implements Initializable {
 						nodeName.setLayoutY(scrollImage.getHeight()-335);
 						nodeDescription.setLayoutY(scrollImage.getHeight()-335);
 						nodeDescription.setLayoutX(nodeName.getLayoutX()+nodeName.getWidth()+20);
-						name.setLayoutY(nodeName.getLayoutY()-17);
+						name.setLayoutY(nodeName.getLayoutY()-19);
 						edgeOptions.setLayoutY(280);
-						description.setLayoutY(nodeDescription.getLayoutY()-17);
+						description.setLayoutY(nodeDescription.getLayoutY()-19);
 						description.setLayoutX(nodeDescription.getLayoutX());
 						System.out.println("************");
 						System.out.println(nodeOptions.getLayoutX());
