@@ -28,8 +28,6 @@ public class Main extends Application {
 				 primaryStage.setHeight(800);
 				 primaryStage.setMinWidth(1200);
 				 primaryStage.setMinHeight(800);
-
-				// primaryStage.set
 			 }
 			
 		} catch(Exception e) {
@@ -52,7 +50,8 @@ public class Main extends Application {
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Randy Advanced Mapping Peripheral (R.A.M.P");
+            primaryStage.setTitle("Randy Advanced Mapping Peripheral (R.A.M.P.)");
+            //primaryStage.setResizable(false);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
