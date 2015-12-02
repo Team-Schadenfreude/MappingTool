@@ -140,8 +140,8 @@ public class MainController implements Initializable {
 	private static boolean shouldShowEdges = false;
 	private static boolean shouldMakeEdge = false;
 	private static boolean shouldRemoveEdge = false;
-	static volatile boolean oneSelected = false;
-	static volatile boolean twoSelected = false;
+	static boolean oneSelected = false;
+	static boolean twoSelected = false;
 	Node currentNode;
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -159,7 +159,7 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event arg0) {
-				
+
 			}
 
 		});
@@ -169,7 +169,7 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-
+				
 				shouldAddEdge = false;
 				shouldDeleteEdge = false;
 				shouldShowEdges = false;
@@ -178,7 +178,7 @@ public class MainController implements Initializable {
 				nodeOptions.setText("Adding Node");
 				edgeOptions.setText("Edge Options");
 				if(shouldAddNode){
-
+					imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED,this);
 					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent event) {
@@ -199,8 +199,7 @@ public class MainController implements Initializable {
 										Node node = new Node("node",(int)event.getX()-5,(int)event.getY()-5,0,nodeMapName,"");
 										mapNodes.add(node);
 										clearCanvas();
-										renderEdges();
-										renderNodes();
+										renderEverything();
 										System.out.println(mapNodes);
 
 										doOnce = false;
@@ -258,8 +257,8 @@ public class MainController implements Initializable {
 				shouldDeleteEdge = false;
 				shouldDeleteNode = true;
 				shouldAddNode = false;
-				
-				
+
+
 				nodeOptions.setText("Deleting Node");
 
 				if(shouldDeleteNode){
@@ -281,8 +280,7 @@ public class MainController implements Initializable {
 										fixEdges(mapNodes.get(i));
 										mapNodes.remove(i);
 										clearCanvas();
-										renderEdges();
-										renderNodes();
+										renderEverything();
 										System.out.println(mapNodes);
 									}
 								}
@@ -314,6 +312,7 @@ public class MainController implements Initializable {
 			@Override
 			public void handle(Event arg0) {
 				mapNodes.get(currentNodeLoc).isTransitionNode = !mapNodes.get(currentNodeLoc).isTransitionNode;
+				renderTransitionNodes();
 			}
 
 		});
@@ -368,8 +367,7 @@ public class MainController implements Initializable {
 					public void handle(MouseEvent event) {
 
 						clearCanvas();
-						renderNodes();
-						renderEdges();
+						renderEverything();
 						nodeName.setStyle(null);
 						nodeDescription.setStyle(null);
 						for(int i = 0; i < mapNodes.size();i++){
@@ -438,10 +436,11 @@ public class MainController implements Initializable {
 						genSupermap.setLayoutY(nodeName.getLayoutY()-21);
 						getNodesFromFile1(Paths.get(path+"mapNodes.csv").toString());
 						checkForTransNodes(mapNodes,map1TransitionNodes);
-						//connectEdgesFromFile(mapNodes,Paths.get(path+"mapEdges.csv").toString());
+						connectEdgesFromFile(mapNodes,Paths.get(path+"mapEdges.csv").toString());
 						map1Dropdown.setItems(FXCollections.observableArrayList(map1TransitionNodes));
-						renderNodes();
-						renderEdges();
+						renderEverything();
+
+
 						mapLoaded = true;
 						Main.primaryStage.setWidth(1175);
 						Main.primaryStage.setHeight(650);
@@ -552,7 +551,7 @@ public class MainController implements Initializable {
 								}
 							}
 
-							if(shouldMakeEdge && firstNodeLoc != secondNodeLoc &&firstNodeLoc!=-1 && secondNodeLoc!=-1){
+							if(shouldMakeEdge && firstNodeLoc != secondNodeLoc &&firstNodeLoc!=-1 && secondNodeLoc!=-1 &&secondNodeLoc!=firstNodeLoc){
 								shouldMakeEdge = false;
 
 								System.out.println("Making an edge at " +firstNodeLoc + " "+secondNodeLoc);
@@ -564,8 +563,10 @@ public class MainController implements Initializable {
 									edgeNodes.add(mapNodes.get(secondNodeLoc));
 									System.out.println(mapNodes.get(firstNodeLoc).neighbors);
 									GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-									renderEdges();
-									renderNodes();
+									shouldDeleteEdge = false;
+									renderEverything();
+									event.consume();
+
 
 								}
 								firstNodeLoc = -1;
@@ -573,28 +574,31 @@ public class MainController implements Initializable {
 								numberClicks = 0;
 								shouldMakeEdge = false;
 								renderNodes();
+								shouldDeleteEdge = false;
+								oneSelected = false;
+								twoSelected = false;
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
 								System.out.println("RESTARTING");
 
+
 							} else {
-								
+
 								if(firstNodeLoc == -1){
-									System.out.println("Fucked up1");
 									numberClicks = 0;
 									//firstNodeLoc = 0;
-									renderNodes();
 									shouldMakeEdge = false;
+									shouldDeleteEdge = false;
 								} else {
-									System.out.println("Fucked up2");
 									numberClicks = 1;
 									secondNodeLoc = 0;
-//									/renderNodes();
+									renderNodes();
 									shouldMakeEdge = false;
+									shouldDeleteEdge = false;
 								}
-								
+
 							}
 
 
@@ -603,8 +607,9 @@ public class MainController implements Initializable {
 					});		
 				} else {
 					System.out.println("Not clicking");
+					shouldDeleteEdge = false;
 				}
-
+				oneSelected = false;
 			}    
 
 		});
@@ -617,60 +622,74 @@ public class MainController implements Initializable {
 
 				saveMapNodes(Paths.get(path).toString()+"\\mapNodes.csv");
 				saveMapEdges(Paths.get(path).toString()+"\\mapEdges.csv");
+				genSupermap.setText("Map Saved!");
+				genSupermap.setTextFill(Color.BLUE);
 
 			}
 
 		});
 
 
-		
+
 		makeTransButton.setOnAction(new EventHandler(){
 
 			@Override
 			public void handle(Event event) {
 
-					if(map1Dropdown.getSelectionModel().getSelectedItem()!=null &&map2Dropdown.getSelectionModel().getSelectedItem()!=null){
-						map1Dropdown.getSelectionModel().getSelectedItem().neighbors.add(map2Dropdown.getSelectionModel().getSelectedItem());
-						map2Dropdown.getSelectionModel().getSelectedItem().neighbors.add(map1Dropdown.getSelectionModel().getSelectedItem());
+				if(map1Dropdown.getSelectionModel().getSelectedItem()!=null &&map2Dropdown.getSelectionModel().getSelectedItem()!=null){
+					map1Dropdown.getSelectionModel().getSelectedItem().neighbors.add(map2Dropdown.getSelectionModel().getSelectedItem());
+					map2Dropdown.getSelectionModel().getSelectedItem().neighbors.add(map1Dropdown.getSelectionModel().getSelectedItem());
 
-						System.out.println(map1Dropdown.getSelectionModel().getSelectedItem().neighbors);
-						System.out.println(map2Dropdown.getSelectionModel().getSelectedItem().neighbors);
+					System.out.println(map1Dropdown.getSelectionModel().getSelectedItem().neighbors);
+					System.out.println(map2Dropdown.getSelectionModel().getSelectedItem().neighbors);
 
-					}
+				}
 			}
-			
+
 		});
 
 		deleteEdge.setOnAction(new EventHandler(){
 			@Override
 			public void handle(Event arg0){
+
 				shouldDeleteEdge = true;
 				System.out.println("Starting event handler for delete");
-				firstNodeLoc = 0;
-				secondNodeLoc = 0;
+				firstNodeLoc = -1;
+				secondNodeLoc = -1;
+				System.out.println(oneSelected);
+				System.out.println(twoSelected);
 				oneSelected = false;
 				twoSelected = false;
+				clearTrue();
 				shouldAddEdge = false;
 				shouldAddNode = false;
 				shouldDeleteNode = false;
 				shouldShowEdges = false;
+				clearTrue();
 				edgeOptions.setText("Deleting Edge");
 				nodeOptions.setText("Node Options");
+				System.out.println(oneSelected);
+				clearTrue();
+				System.out.println(twoSelected);
+
+				System.out.println("Starting");
 
 
-
-
-				if(shouldDeleteEdge){
-					if(shouldDeleteEdge){
+				if(shouldDeleteEdge == true && shouldAddEdge == false){
+					oneSelected = false;
+					System.out.println("*************");
+					System.out.println(oneSelected);
+					System.out.println("*************");
 
 					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent event) {
+							System.out.println("******Handle*******");
 							System.out.println(oneSelected);
-							System.out.println(twoSelected);
-							System.out.println(event.getClickCount());
-							event.consume();
-							if(!oneSelected){
+							System.out.println("******Handle*******");
+
+
+							if(oneSelected == false){
 								for(int i = 0; i < mapNodes.size();i++){
 									if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
 										System.out.println("CLICKED THE FIRST NODE");
@@ -718,139 +737,30 @@ public class MainController implements Initializable {
 									mapNodes.get(firstNodeLoc).neighbors.remove(mapNodes.get(secondNodeLoc));
 									mapNodes.get(secondNodeLoc).neighbors.remove(mapNodes.get(firstNodeLoc));
 									clearCanvas();
-									renderEdges();
-									renderNodes();
-									
+									renderEverything();
+
+									event.consume();
 									System.out.println(mapNodes.get(firstNodeLoc).neighbors);
 								}
-								firstNodeLoc = 0;
-								secondNodeLoc = 0;
+								firstNodeLoc = -1;
+								secondNodeLoc = -1;
+								renderEverything();
+								imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
+
+							} else {
+								twoSelected =false;
 							}
-						
-						
+
+
 						}
-						
+
 					});	
-					}
+
 				} 
 
 
 			}
-			//			public void handle(Event arg0) {
-			//				shouldAddEdge = false;
-			//				shouldAddNode = false;
-			//				shouldDeleteNode = false;
-			//				shouldDeleteEdge = true;
-			//				shouldShowEdges = false;
-			//				edgeOptions.setText("Deleting Edge");
-			//				nodeOptions.setText("Node Options");
-			//				firstNodeLoc = -1;
-			//				secondNodeLoc = -1;
-			//
-			//				numberClicks = 0;
-			//				System.out.println(numberClicks);
-			//				if(shouldDeleteEdge){
-			//					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			//						@Override
-			//						public void handle(MouseEvent event) {
-			//
-			//
-			//							if(shouldDeleteEdge){
-			//								System.out.println("***********");
-			//								System.out.println(numberClicks);
-			//								System.out.println(firstNodeLoc);
-			//								System.out.println(secondNodeLoc);
-			//								System.out.println("***********");
-			//
-			//								System.out.println("Trying to delete edge");
-			//								if(numberClicks == 1 && firstNodeLoc==-1){
-			//									for(int i = 0; i < mapNodes.size();i++){
-			//										if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
-			//											System.out.println("CLICKED THE FIRST NODE");
-			//											firstNodeLoc = i;
-			//											numberClicks =2;
-			//											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-			//											//gc.clearRect(event.getX()-5, event.getY()-5, 30, 30);
-			//											gc.setFill(Color.GOLD);
-			//											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
-			//											gc.setFill(Color.RED);
-			//											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
-			//											event.consume();	
-			//											break;
-			//										} 
-			//									}
-			//									System.out.println("Number Clicks is: " +numberClicks);
-			//								} 
-			//								
-			//								
-			//								System.out.println("Number Clicks is: " +numberClicks);
-			//								System.out.println(firstNodeLoc);
-			//								
-			//									if(numberClicks !=1 && firstNodeLoc !=-1){
-			//									for(int i = 0; i < mapNodes.size();i++){
-			//										if(mapNodes.get(i).xPos >=event.getX()-5-10&& mapNodes.get(i).xPos <=event.getX()-5+10 && mapNodes.get(i).yPos>=event.getY()-5-10 && mapNodes.get(i).yPos<=event.getY()-5+10){
-			//											System.out.println("CLICKED THE SECOND NODE");
-			//											secondNodeLoc = i;
-			//											numberClicks = 3;
-			//											shouldRemoveEdge = true;
-			//											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-			//
-			//											gc.setFill(Color.GOLD);
-			//											gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos, 10, 10);
-			//											gc.setFill(Color.RED);
-			//											gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5, 7, 7);
-			//										} 
-			//									}
-			//								}
-			//							}
-			//
-			//							if(shouldRemoveEdge && firstNodeLoc != secondNodeLoc){
-			//								shouldRemoveEdge = false;
-			//
-			//								System.out.println("Removing an edge at " +firstNodeLoc + " "+secondNodeLoc);
-			//
-			//								if(mapNodes.get(firstNodeLoc).neighbors.contains(mapNodes.get(secondNodeLoc))){
-			//									mapNodes.get(firstNodeLoc).neighbors.remove(mapNodes.get(secondNodeLoc));
-			//									mapNodes.get(secondNodeLoc).neighbors.remove(mapNodes.get(firstNodeLoc));
-			//
-			//									
-			//									
-			//									System.out.println(mapNodes.get(firstNodeLoc).neighbors);
-			//									GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-			//									gc.setFill(Color.WHEAT);
-			//									gc.strokeLine(mapNodes.get(firstNodeLoc).xPos+5, mapNodes.get(firstNodeLoc).yPos+5, mapNodes.get(secondNodeLoc).xPos+5, mapNodes.get(secondNodeLoc).yPos+5);
-			//									gc.setFill(Color.RED);
-			//									//gc.fillOval((double)mapNodes.get(firstNodeLoc).xPos,(double)mapNodes.get(firstNodeLoc).yPos, 10, 10);
-			//									//gc.fillOval((double)mapNodes.get(secondNodeLoc).xPos,(double)mapNodes.get(secondNodeLoc).yPos, 10, 10);
-			//									clearCanvas();
-			//									renderNodes();
-			//									renderEdges();
-			//								}
-			//								firstNodeLoc = 0;
-			//								secondNodeLoc = 0;
-			//								numberClicks = 0;
-			//								System.out.println("RESTARTING");
-			//								System.out.println("RESTARTING");
-			//								System.out.println("RESTARTING");
-			//								System.out.println("RESTARTING");
-			//								System.out.println("RESTARTING");
-			//
-			//							} else {
-			//								System.out.println("IN ELSE");
-			//								numberClicks = 2;
-			//								secondNodeLoc = 0;
-			//								shouldRemoveEdge = false;
-			//							}
-			//
-			//
-			//
-			//						}
-			//					});		
-			//				} else {
-			//					System.out.println("Not clicking");
-			//				}
-			//
-			//			}    
+
 
 		});
 
@@ -878,8 +788,8 @@ public class MainController implements Initializable {
 			@Override
 			public void handle(Event arg0) {
 				clearCanvas();
-				renderNodes();
-				renderEdges();
+				renderEverything();
+
 			}
 
 		});
@@ -985,59 +895,65 @@ public class MainController implements Initializable {
 		}
 	}
 
-//	private static void connectEdgesFromFile(List<Node> nodeList, String filePath)
-//	{
-//		BufferedReader br = null;
-//		String line = "";
-//		String delimiter = ",";
-//		int edgeX1Index = 0;
-//		int edgeY1Index = 1;
-//		int edgeX2Index = 4;
-//		int edgeY2Index = 5;
-//
-//		try {
-//
-//			br = new BufferedReader(new FileReader(filePath));
-//			while ((line = br.readLine()) != null) {
-//
-//				// use comma as separator
-//				String[] edgeData = line.split(delimiter);
-//				int x1 = Integer.parseInt(edgeData[edgeX1Index]);
-//				int y1 = Integer.parseInt(edgeData[edgeY1Index]);
-//				int x2 = Integer.parseInt(edgeData[edgeX2Index]);
-//				int y2 = Integer.parseInt(edgeData[edgeY2Index]);
-//				Node n1 = findNodeByXY(nodeList, x1, y1);
-//				Node n2 = findNodeByXY(nodeList, x2, y2);
-//				System.out.println("********************");
-//				System.out.println(n1.nodeName);
-//				System.out.println(n2.nodeName);
-//				System.out.println("********************");
-//
-//				if (n1.neighbors == null)
-//				{
-//					n1.neighbors.add(n2);
-//
-//
-//				}else
-//				{
-//					n1.neighbors.add(n2);
-//				}
-//
-//
-//
-//			}
-//
-//		} 
-//		catch (FileNotFoundException e) {e.printStackTrace();} 
-//		catch (IOException e) {e.printStackTrace();} 
-//		finally {
-//			if (br != null) {
-//				try {
-//					br.close();
-//				} catch (IOException e) {e.printStackTrace();}
-//			}
-//		}
-//	}
+	private static void connectEdgesFromFile(List<Node> nodeList, String filePath)
+	{
+		BufferedReader br = null;
+		String line = "";
+		String delimiter = ",";
+		int edgeX1Index = 0;
+		int edgeY1Index = 1;
+		int edgeX2Index = 4;
+		int edgeY2Index = 5;
+
+		try {
+
+			br = new BufferedReader(new FileReader(filePath));
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] edgeData = line.split(delimiter);
+				int x1 = Integer.parseInt(edgeData[edgeX1Index]);
+				int y1 = Integer.parseInt(edgeData[edgeY1Index]);
+				int x2 = Integer.parseInt(edgeData[edgeX2Index]);
+				int y2 = Integer.parseInt(edgeData[edgeY2Index]);
+				System.out.println(x1+" "+y1+" "+x2+" "+y2);
+				Node n1 = findNodeByXY(nodeList, x1, y1);
+				Node n2 = findNodeByXY(nodeList, x2, y2);
+				System.out.println("********************");
+				//System.out.println(n1.map);
+				//System.out.println(n2.map);
+				System.out.println("********************");
+
+				
+				if(n1 != null&& n2 !=null){
+					if (n1.neighbors == null)
+					{
+						n1.neighbors.add(n2);
+
+
+					}else
+					{
+						n1.neighbors.add(n2);
+					}
+
+				} else {
+					System.out.println("Transition");
+				}
+			}
+
+			
+
+		} 
+		catch (FileNotFoundException e) {e.printStackTrace();} 
+		catch (IOException e) {e.printStackTrace();} 
+		finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {e.printStackTrace();}
+			}
+		}
+	}
 
 	public static Node findNodeByXY(List<Node> nodeList, int x, int y)//Want to change this to throwing an exception when the node is not found
 	{
@@ -1100,13 +1016,13 @@ public class MainController implements Initializable {
 		System.out.println(nodeList);
 		mapNodes = nodeList;
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	private void getNodesFromFile2(String filePath)
 	{
 		Boolean isTrans = null;
@@ -1156,10 +1072,10 @@ public class MainController implements Initializable {
 		System.out.println(nodeList);
 		mapNodes2 = nodeList;
 	}
-	
-	
-	
-	
+
+
+
+
 
 	private void checkForTransNodes(List<Node> mapNodesNumber,List<Node>transNodeStore){
 		for(Node n: mapNodesNumber){
@@ -1169,7 +1085,13 @@ public class MainController implements Initializable {
 			}
 		}
 	}
-	
+
+
+	private void clearTrue(){
+		oneSelected = false;
+		twoSelected = false;
+	}
+
 	private Node findTransNode(String name,List<Node> mapTransNodes){
 		for(Node n: mapTransNodes){
 			if(n.nodeName == name){
@@ -1178,9 +1100,9 @@ public class MainController implements Initializable {
 		}
 		return null;
 	}
-	
-	
-	
+
+
+
 	private static void saveMapEdges(String fileName){
 
 		try
@@ -1190,23 +1112,23 @@ public class MainController implements Initializable {
 
 			for (int i = 0; i<mapNodes.size();i++){
 				for (int j = 0; j<mapNodes.get(i).neighbors.size();j++){
-				writer.append(Integer.toString(mapNodes.get(i).xPos));
-				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).yPos));
-				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).zPos));
-				writer.append(',');
-				writer.append(mapNodes.get(i).map);
-				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).xPos));
-				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).yPos));
-				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).zPos));
-				writer.append(',');
-				writer.append(mapNodes.get(i).neighbors.get(j).map);
+					writer.append(Integer.toString(mapNodes.get(i).xPos));
+					writer.append(',');
+					writer.append(Integer.toString(mapNodes.get(i).yPos));
+					writer.append(',');
+					writer.append(Integer.toString(mapNodes.get(i).zPos));
+					writer.append(',');
+					writer.append(mapNodes.get(i).map);
+					writer.append(',');
+					writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).xPos));
+					writer.append(',');
+					writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).yPos));
+					writer.append(',');
+					writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).zPos));
+					writer.append(',');
+					writer.append(mapNodes.get(i).neighbors.get(j).map);
 
-				writer.append("\n");
+					writer.append("\n");
 				}
 			}
 			writer.flush();
@@ -1219,6 +1141,24 @@ public class MainController implements Initializable {
 	}
 
 
+	protected void renderTransitionNodes(){
+		for(Node n: mapNodes){
+			if(n.isTransitionNode == true){
+			GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+			gc.setFill(Color.BLUE);
+			gc.fillRect(n.xPos-.75,n.yPos-.75,12,12);
+			gc.setFill(Color.WHITE);
+			gc.fillOval(n.xPos+1.5, n.yPos+1.5, 7.5, 7.5);
+			}
+		}
 
+
+	}
+	
+	public void renderEverything(){
+		renderEdges();
+		renderNodes();
+		renderTransitionNodes();
+	}
 
 }
