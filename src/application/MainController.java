@@ -55,7 +55,7 @@ public class MainController implements Initializable {
 
 	static List<Node> mapNodes = new ArrayList<Node>();
 	static List<Node> mapNodes2 = new ArrayList<Node>();
-
+	static List<String> typeList = new ArrayList<String>();
 	static List<Node> map1TransitionNodes = new ArrayList<Node>();
 	static List<Node> map2TransitionNodes = new ArrayList<Node>();
 	static List<Node> edgeNodes = new ArrayList<Node>();
@@ -99,6 +99,12 @@ public class MainController implements Initializable {
 
 	@FXML
 	private Button genSupermap = new Button();
+
+	@FXML
+	private ComboBox<String> typeBox = new ComboBox();
+
+	@FXML
+	private Label type;
 
 	@FXML
 	private Button loadMap1 = new Button();
@@ -193,7 +199,7 @@ public class MainController implements Initializable {
 				}
 
 				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-					
+
 					@Override
 					public void handle(MouseEvent event) {
 
@@ -314,7 +320,9 @@ public class MainController implements Initializable {
 			}
 
 		});
-
+		
+		
+		
 		nodeDescription.setOnAction(new EventHandler() {
 
 			@Override
@@ -441,7 +449,7 @@ public class MainController implements Initializable {
 						map1Dropdown.setItems(FXCollections.observableArrayList(map1TransitionNodes));
 						imageCanvas.setHeight(img.getHeight());
 						imageCanvas.setWidth(img.getWidth());
-
+						
 						stack.getChildren().addAll(mapView, imageCanvas);
 						// stack.getChildren().addAll(imageCanvas,mapView);
 						scrollImage.getTransforms().add(new Scale(.5, .5));
@@ -457,14 +465,17 @@ public class MainController implements Initializable {
 						mapLoaded = true;
 						nodeOptions.setLayoutX(scrollImage.getWidth() - 935);
 						edgeOptions.setLayoutX(scrollImage.getWidth() - 935);
+						edgeOptions.setLayoutY(scrollImage.getHeight() - 650);
 						genSupermap.setLayoutX(scrollImage.getWidth() - 935);
 						genSupermap.setLayoutY(scrollImage.getHeight() - 370);
+						typeBox.setLayoutX(scrollImage.getWidth() - 935);
+						typeBox.setLayoutY(scrollImage.getHeight() - 490);
 
 						nodeName.setLayoutY(scrollImage.getHeight() - 335);
 						nodeDescription.setLayoutY(scrollImage.getHeight() - 335);
 						nodeDescription.setLayoutX(nodeName.getLayoutX() + nodeName.getWidth() + 20);
 						name.setLayoutY(nodeName.getLayoutY() - 19);
-						edgeOptions.setLayoutY(280);
+						//edgeOptions.setLayoutY(280);
 						description.setLayoutY(nodeDescription.getLayoutY() - 19);
 						description.setLayoutX(nodeDescription.getLayoutX());
 						isTransitionCheckbox.setLayoutY(nodeName.getLayoutY() + 4);
@@ -481,6 +492,7 @@ public class MainController implements Initializable {
 						renderEverything();
 						Main.primaryStage.centerOnScreen();
 						node2.setLayoutX(map2Dropdown.getLayoutX());
+						setTypes();
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
@@ -658,9 +670,9 @@ public class MainController implements Initializable {
 				if (map1Dropdown.getSelectionModel().getSelectedItem() != null
 						&& map2Dropdown.getSelectionModel().getSelectedItem() != null) {
 					map1Dropdown.getSelectionModel().getSelectedItem().neighbors
-							.add(map2Dropdown.getSelectionModel().getSelectedItem());
+					.add(map2Dropdown.getSelectionModel().getSelectedItem());
 					map2Dropdown.getSelectionModel().getSelectedItem().neighbors
-							.add(map1Dropdown.getSelectionModel().getSelectedItem());
+					.add(map1Dropdown.getSelectionModel().getSelectedItem());
 					System.out.println(map1Dropdown.getSelectionModel().getSelectedItem().neighbors);
 					System.out.println(map2Dropdown.getSelectionModel().getSelectedItem().neighbors);
 
@@ -900,18 +912,18 @@ public class MainController implements Initializable {
 	}
 
 	public static Node findNodeByXY(List<Node> nodeList, int x, int y)// Want to
-																		// change
-																		// this
-																		// to
-																		// throwing
-																		// an
-																		// exception
-																		// when
-																		// the
-																		// node
-																		// is
-																		// not
-																		// found
+	// change
+	// this
+	// to
+	// throwing
+	// an
+	// exception
+	// when
+	// the
+	// node
+	// is
+	// not
+	// found
 	{
 		for (Node n : nodeList) {
 			if (n.xPos == x && n.yPos == y) {
@@ -1122,4 +1134,16 @@ public class MainController implements Initializable {
 		secondNodeLoc = -1;
 	}
 
+	public void setTypes(){
+		typeList.add("BathroomW");
+		typeList.add("BathroomM");
+		typeList.add("Elevator");
+		typeList.add("Entrance");
+		typeList.add("Room");
+		typeList.add("Stairs");
+		typeBox.setItems(FXCollections.observableArrayList(typeList));
+		
+	}
+
+	
 }
