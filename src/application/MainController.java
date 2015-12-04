@@ -154,16 +154,14 @@ public class MainController implements Initializable {
 	private static boolean shouldAddEdge = false;
 	private static boolean shouldDeleteEdge = false;
 	private static boolean shouldModifyNode = false;
-	private static boolean shouldShowEdges = false;
 	private static boolean shouldMakeEdge = false;
-	private static boolean shouldRemoveEdge = false;
 	static boolean oneSelected = false;
 	static boolean twoSelected = false;
 	Node currentNode;
-	
+
 	static boolean isDeleteDone = false;
 	static boolean isAddDone = false;
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -187,77 +185,77 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-				
+
 				resetAllVariables();
 				shouldAddNode = true;
 				nodeOptions.setText("Adding Node");
-		
-				if (!shouldAddNode){
+
+				if (!shouldAddNode) {
 					imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 				}
-				
-				if (shouldAddNode) {
-					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-						@Override
-						public void handle(MouseEvent event) {
-							if (shouldAddNode) {
-								
-								// System.out.println("GetSceneCoords");
-								// System.out.println(event.getY());
-								// System.out.println(event.getX());
 
-								GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-								// imageCanvas.getGraphicsContext2D().clearRect(0,
-								// 0, imageCanvas.getWidth(),
-								// imageCanvas.getHeight());
-								if (doOnce) {
-									if (mapNodes.size() == 0) {
-										// System.out.println("Creating new node at " + event.getX() + " " + event.getY());
-										Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15,
-												0, nodeMapName, "");
-										mapNodes.add(node);
-										clearCanvas();
-										renderEverything();
-										// System.out.println(mapNodes);
+				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+					
+					@Override
+					public void handle(MouseEvent event) {
 
-										doOnce = false;
-										// System.out.println("Zero map Node");
-									}
-								} else {
+						// System.out.println("GetSceneCoords");
+						// System.out.println(event.getY());
+						// System.out.println(event.getX());
 
-									for (int i = 0; i < mapNodes.size(); i++) {
-										if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-												&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-												&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-												&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
-											// System.out.println("Node already exists here");
-											// System.out.println(mapNodes.get(i).xPos);
-											// System.out.println(mapNodes.get(i).yPos);
-											// System.out.println("Counter is: " + i);
-											// System.out.println(event.getX() - 5);
-											// System.out.println(event.getY() - 5);
-											duplicateNode++;
-										}
-									}
-								}
-								if (duplicateNode == 0) {
-									// System.out.println("In duplicate node");
-									Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
-											nodeMapName, "");
-									mapNodes.add(node);
-									renderEverything();
-									// System.out.println(mapNodes);
-								} else {
-									duplicateNode = 0;
-								}
+						GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+						// imageCanvas.getGraphicsContext2D().clearRect(0,
+						// 0, imageCanvas.getWidth(),
+						// imageCanvas.getHeight());
+						if (doOnce) {
+							if (mapNodes.size() == 0) {
+								// System.out.println("Creating new node
+								// at " + event.getX() + " " +
+								// event.getY());
+								Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
+										nodeMapName, "");
+								mapNodes.add(node);
+								clearCanvas();
+								renderEverything();
+								// System.out.println(mapNodes);
 
+								doOnce = false;
+								// System.out.println("Zero map Node");
 							}
+						} else {
 
+							for (int i = 0; i < mapNodes.size(); i++) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+									// System.out.println("Node already
+									// exists here");
+									// System.out.println(mapNodes.get(i).xPos);
+									// System.out.println(mapNodes.get(i).yPos);
+									// System.out.println("Counter is: "
+									// + i);
+									// System.out.println(event.getX() -
+									// 5);
+									// System.out.println(event.getY() -
+									// 5);
+									duplicateNode++;
+								}
+							}
 						}
-					});
-				} else {
-					System.out.println("Not clicking");
-				}
+						if (duplicateNode == 0) {
+							// System.out.println("In duplicate node");
+							Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
+									nodeMapName, "");
+							mapNodes.add(node);
+							renderEverything();
+							// System.out.println(mapNodes);
+						} else {
+							duplicateNode = 0;
+						}
+
+					}
+				});
 			}
 		});
 
@@ -265,43 +263,39 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-				
+
 				resetAllVariables();
 				shouldDeleteNode = true;
 				nodeOptions.setText("Deleting Node");
-				
-				if (!shouldDeleteNode){
+
+				if (!shouldDeleteNode) {
 					imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 				}
 
-				if (shouldDeleteNode) {
-
-					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-						@Override
-						public void handle(MouseEvent event) {
-							if (shouldDeleteNode) {
-								for (int i = 0; i < mapNodes.size(); i++) {
-									if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-											&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-											&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-											&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
-										fixEdges(mapNodes.get(i));
-										mapNodes.remove(i);
-										clearCanvas();
-										renderEverything();
-										System.out.println(mapNodes);
-									} else {
-										// System.out.println("Missed bitch");
-									}
+				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						if (shouldDeleteNode) {
+							for (int i = 0; i < mapNodes.size(); i++) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+									fixEdges(mapNodes.get(i));
+									mapNodes.remove(i);
+									clearCanvas();
+									renderEverything();
+									System.out.println(mapNodes);
+								} else {
+									// System.out.println("Missed bitch");
 								}
-
 							}
 
 						}
-					});
-				} else {
-					// System.out.println("Not clicking");
-				}
+
+					}
+				});
+
 			}
 		});
 
@@ -317,9 +311,7 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event arg0) {
-				
-				
-				
+
 				mapNodes.get(currentNodeLoc).isTransitionNode = !mapNodes.get(currentNodeLoc).isTransitionNode;
 				renderTransitionNodes();
 			}
@@ -330,9 +322,9 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-				
+
 				resetSaveButton();
-				
+
 				if (currentNodeLoc != -1) {
 					mapNodes.get(currentNodeLoc).description = nodeDescription.getText();
 					nodeDescription.setStyle("-fx-text-fill: green;-fx-font-weight: bold;");
@@ -348,9 +340,9 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-				
+
 				resetSaveButton();
-				
+
 				if (currentNodeLoc != -1) {
 					mapNodes.get(currentNodeLoc).nodeName = nodeName.getText();
 					nodeName.setStyle("-fx-text-fill: green;-fx-font-weight: bold;");
@@ -366,15 +358,19 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-				
+
 				resetAllVariables();
 				shouldModifyNode = true;
 				nodeOptions.setText("Modifying Node");
-				
+
 				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
 					@Override
 					public void handle(MouseEvent event) {
+
+						if (!shouldModifyNode) {
+							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
+						}
 
 						clearCanvas();
 						renderEverything();
@@ -413,7 +409,7 @@ public class MainController implements Initializable {
 			@Override
 			public void handle(Event e) {
 				resetSaveButton();
-				
+
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -501,7 +497,7 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event e) {
-				
+
 				resetSaveButton();
 				String path;
 				JFileChooser fileChooser = new JFileChooser();
@@ -532,118 +528,113 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event arg0) {
-				
+
 				resetAllVariables();
 				shouldAddEdge = true;
 				edgeOptions.setText("Adding Edge");
-				
-				if (shouldAddEdge) {
-					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-						
-						@Override
-						public void handle(MouseEvent event) {
 
-							if (!shouldAddEdge){
-								imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
-							}
-							
-								// System.out.println("***********");
-								// System.out.println(numberClicks);
-								// System.out.println(firstNodeLoc);
-								// System.out.println(secondNodeLoc);
-								// System.out.println("***********");
+				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
-								// System.out.println("Trying to add edge");
-								if (numberClicks == 0) {
-									for (int i = 0; i < mapNodes.size(); i++) {
-										if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-												&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-												&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-												&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
-											firstNodeLoc = i;
-											numberClicks += 1;
-											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-											// gc.clearRect(event.getX()-5,
-											// event.getY()-5, 30, 30);
-											// clearCanvas();
-											renderEverything();
-											gc.setFill(Color.GOLD);
-											gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos,
-													30, 30);
-											gc.setFill(Color.RED);
-											gc.fillOval((double) mapNodes.get(i).xPos + 4,
-													(double) mapNodes.get(i).yPos + 4, 22, 22);
+					@Override
+					public void handle(MouseEvent event) {
 
-										}
-									}
-								} else if (numberClicks != 0) {
-									for (int i = 0; i < mapNodes.size(); i++) {
-										if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-												&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-												&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-												&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
-											secondNodeLoc = i;
-											numberClicks = 2;
-											shouldMakeEdge = true;
-											GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-											// clearCanvas();
-											renderEverything();
-											gc.setFill(Color.GOLD);
-											gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos,
-													30, 30);
-											gc.setFill(Color.RED);
-											gc.fillOval((double) mapNodes.get(i).xPos + 4,
-													(double) mapNodes.get(i).yPos + 4, 22, 22);
-										}
-									}
-								}
+						if (!shouldAddEdge) {
+							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
+						}
 
-							if (shouldMakeEdge && firstNodeLoc != secondNodeLoc && firstNodeLoc != -1
-									&& secondNodeLoc != -1 && secondNodeLoc != firstNodeLoc) {
-								shouldMakeEdge = false;
+						// System.out.println("***********");
+						// System.out.println(numberClicks);
+						// System.out.println(firstNodeLoc);
+						// System.out.println(secondNodeLoc);
+						// System.out.println("***********");
+						// System.out.println("Trying to add edge");
 
-								// System.out.println("Making an edge at " + firstNodeLoc + " " + secondNodeLoc);
-
-								if (!mapNodes.get(firstNodeLoc).neighbors.contains(mapNodes.get(secondNodeLoc))) {
-									mapNodes.get(firstNodeLoc).neighbors.add(mapNodes.get(secondNodeLoc));
-									mapNodes.get(secondNodeLoc).neighbors.add(mapNodes.get(firstNodeLoc));
-									edgeNodes.add(mapNodes.get(firstNodeLoc));
-									edgeNodes.add(mapNodes.get(secondNodeLoc));
-									// System.out.println(mapNodes.get(firstNodeLoc).neighbors);
+						if (numberClicks == 0) {
+							for (int i = 0; i < mapNodes.size(); i++) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+									firstNodeLoc = i;
+									numberClicks += 1;
 									GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+									// gc.clearRect(event.getX()-5,
+									// event.getY()-5, 30, 30);
+									// clearCanvas();
 									renderEverything();
-									event.consume();
+									gc.setFill(Color.GOLD);
+									gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos, 30, 30);
+									gc.setFill(Color.RED);
+									gc.fillOval((double) mapNodes.get(i).xPos + 4, (double) mapNodes.get(i).yPos + 4,
+											22, 22);
 
 								}
-								firstNodeLoc = -1;
-								secondNodeLoc = -1;
-								numberClicks = 0;
-								shouldMakeEdge = false;
+							}
+						} else if (numberClicks != 0) {
+							for (int i = 0; i < mapNodes.size(); i++) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+									secondNodeLoc = i;
+									numberClicks = 2;
+									shouldMakeEdge = true;
+									GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+									// clearCanvas();
+									renderEverything();
+									gc.setFill(Color.GOLD);
+									gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos, 30, 30);
+									gc.setFill(Color.RED);
+									gc.fillOval((double) mapNodes.get(i).xPos + 4, (double) mapNodes.get(i).yPos + 4,
+											22, 22);
+								}
+							}
+						}
+
+						if (shouldMakeEdge && firstNodeLoc != secondNodeLoc && firstNodeLoc != -1 && secondNodeLoc != -1
+								&& secondNodeLoc != firstNodeLoc) {
+							shouldMakeEdge = false;
+
+							// System.out.println("Making an edge at " +
+							// firstNodeLoc + " " + secondNodeLoc);
+
+							if (!mapNodes.get(firstNodeLoc).neighbors.contains(mapNodes.get(secondNodeLoc))) {
+								mapNodes.get(firstNodeLoc).neighbors.add(mapNodes.get(secondNodeLoc));
+								mapNodes.get(secondNodeLoc).neighbors.add(mapNodes.get(firstNodeLoc));
+								edgeNodes.add(mapNodes.get(firstNodeLoc));
+								edgeNodes.add(mapNodes.get(secondNodeLoc));
+								// System.out.println(mapNodes.get(firstNodeLoc).neighbors);
+								GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 								renderEverything();
-								oneSelected = false;
-								twoSelected = false;
-								// System.out.println("RESTARTING");
+								event.consume();
 
+							}
+							firstNodeLoc = -1;
+							secondNodeLoc = -1;
+							numberClicks = 0;
+							shouldMakeEdge = false;
+							renderEverything();
+							oneSelected = false;
+							twoSelected = false;
+							// System.out.println("RESTARTING");
+
+						} else {
+
+							if (firstNodeLoc == -1) {
+								numberClicks = 0;
+								// firstNodeLoc = 0;
+								shouldMakeEdge = false;
 							} else {
-
-								if (firstNodeLoc == -1) {
-									numberClicks = 0;
-									// firstNodeLoc = 0;
-									shouldMakeEdge = false;
-								} else {
-									numberClicks = 1;
-									secondNodeLoc = 0;
-									// renderEverything();
-									shouldMakeEdge = false;
-								}
-
+								numberClicks = 1;
+								secondNodeLoc = 0;
+								// renderEverything();
+								shouldMakeEdge = false;
 							}
 
 						}
-					});
-				} else {
-					System.out.println("Not clicking");
-				}
+
+					}
+				});
 
 			}
 
@@ -667,7 +658,7 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event event) {
-				
+
 				resetSaveButton();
 
 				if (map1Dropdown.getSelectionModel().getSelectedItem() != null
@@ -687,97 +678,88 @@ public class MainController implements Initializable {
 		deleteEdge.setOnAction(new EventHandler() {
 			@Override
 			public void handle(Event arg0) {
-				
+
 				resetAllVariables();
 				shouldDeleteEdge = true;
 				edgeOptions.setText("Deleting Edge");
 
-				if (shouldDeleteEdge == true && shouldAddEdge == false) {
-					oneSelected = false;
+				// Delete edge event handler created.
+				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
 
-					imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-						@Override
-						public void handle(MouseEvent event) {
-							
-							if (!shouldDeleteEdge){
-								imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
-							}
-
-							if (oneSelected == false) {
-								for (int i = 0; i < mapNodes.size(); i++) {
-									if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-											&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-											&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-											&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
-										oneSelected = true;
-										firstNodeLoc = i;
-										GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-										gc.setFill(Color.GOLD);
-										gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos, 30,
-												30);
-										gc.setFill(Color.RED);
-										gc.fillOval((double) mapNodes.get(i).xPos + 4,
-												(double) mapNodes.get(i).yPos + 4, 22, 22);
-										break;
-										// firstNodeLoc = i;
-										// numberClicks =2;
-										// GraphicsContext gc =
-										// imageCanvas.getGraphicsContext2D();
-										// gc.setFill(Color.GOLD);
-										// gc.fillOval((double)mapNodes.get(i).xPos,(double)mapNodes.get(i).yPos,
-										// 10, 10);
-										// gc.setFill(Color.RED);
-										// gc.fillOval((double)mapNodes.get(i).xPos+1.5,(double)mapNodes.get(i).yPos+1.5,
-										// 7, 7);
-										// event.consume();
-									}
-								}
-							} else if (oneSelected) {
-								for (int i = 0; i < mapNodes.size(); i++) {
-									if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-											&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-											&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-											&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
-										twoSelected = true;
-										GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-										gc.setFill(Color.GOLD);
-										gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos, 30,
-												30);
-										gc.setFill(Color.RED);
-										gc.fillOval((double) mapNodes.get(i).xPos + 4,
-												(double) mapNodes.get(i).yPos + 4, 22, 22);
-										secondNodeLoc = i;
-										break;
-									}
-								}
-							}
-
-							if (oneSelected && twoSelected) {
-								oneSelected = false;
-								twoSelected = false;
-								if (mapNodes.get(firstNodeLoc).neighbors.contains(mapNodes.get(secondNodeLoc))
-										&& mapNodes.get(secondNodeLoc).neighbors.contains(mapNodes.get(firstNodeLoc))) {
-									mapNodes.get(firstNodeLoc).neighbors.remove(mapNodes.get(secondNodeLoc));
-									mapNodes.get(secondNodeLoc).neighbors.remove(mapNodes.get(firstNodeLoc));
-									clearCanvas();
-									renderEverything();
-
-									event.consume();
-								}
-								firstNodeLoc = -1;
-								secondNodeLoc = -1;
-								renderEverything();
-								//imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
-
-							} else {
-								twoSelected = false;
-							}
-
+						if (!shouldDeleteEdge) {
+							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 						}
 
-					});
+						if (!oneSelected) {
 
-				}
+							for (int i = 0; i < mapNodes.size(); i++) {
+
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+									oneSelected = true;
+									firstNodeLoc = i;
+									GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+									gc.setFill(Color.GOLD);
+									gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos, 30, 30);
+									gc.setFill(Color.RED);
+									gc.fillOval((double) mapNodes.get(i).xPos + 4, (double) mapNodes.get(i).yPos + 4,
+											22, 22);
+									break;
+
+								}
+
+							}
+						} else if (oneSelected) {
+
+							for (int i = 0; i < mapNodes.size(); i++) {
+
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+									twoSelected = true;
+									GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+									gc.setFill(Color.GOLD);
+									gc.fillOval((double) mapNodes.get(i).xPos, (double) mapNodes.get(i).yPos, 30, 30);
+									gc.setFill(Color.RED);
+									gc.fillOval((double) mapNodes.get(i).xPos + 4, (double) mapNodes.get(i).yPos + 4,
+											22, 22);
+									secondNodeLoc = i;
+									break;
+
+								}
+							}
+						}
+
+						if (oneSelected && twoSelected) {
+
+							oneSelected = false;
+							twoSelected = false;
+
+							if (mapNodes.get(firstNodeLoc).neighbors.contains(mapNodes.get(secondNodeLoc))
+									&& mapNodes.get(secondNodeLoc).neighbors.contains(mapNodes.get(firstNodeLoc))) {
+								mapNodes.get(firstNodeLoc).neighbors.remove(mapNodes.get(secondNodeLoc));
+								mapNodes.get(secondNodeLoc).neighbors.remove(mapNodes.get(firstNodeLoc));
+								clearCanvas();
+								renderEverything();
+
+								event.consume();
+							}
+
+							firstNodeLoc = -1;
+							secondNodeLoc = -1;
+							renderEverything();
+						} else {
+							twoSelected = false;
+						}
+
+					}
+
+				});
 
 			}
 
@@ -810,7 +792,7 @@ public class MainController implements Initializable {
 	protected void showNodeData() {
 
 		System.out.println("Showing node data.");
-		
+
 		for (int i = 0; i < mapNodes.size(); i++) {
 			System.out.println(mapNodes.get(i).nodeName);
 			System.out.println(mapNodes.get(i).description);
@@ -823,7 +805,7 @@ public class MainController implements Initializable {
 
 		try {
 			FileWriter writer = new FileWriter(fileName);
-			
+
 			for (int i = 0; i < mapNodes.size(); i++) {
 				writer.append(mapNodes.get(i).nodeName);
 				writer.append(',');
@@ -1112,7 +1094,6 @@ public class MainController implements Initializable {
 				gc.fillOval(n.xPos + 4, n.yPos + 4, 30, 30);
 			}
 		}
-
 	}
 
 	public void renderEverything() {
@@ -1120,35 +1101,35 @@ public class MainController implements Initializable {
 		renderNodes();
 		renderTransitionNodes();
 	}
-	
+
 	public void resetSaveButton() {
 		genSupermap.setText("Save Map");
 		genSupermap.setTextFill(Color.WHITE);
 	}
-	
-	public void resetAllVariables(){
-		
+
+	public void resetAllVariables() {
+
 		// Resets the save map button.
 		resetSaveButton();
-		
-		// Resets booleans for user's current action. 
+
+		// Resets booleans for user's current action.
 		shouldAddNode = false;
 		shouldDeleteNode = false;
 		shouldModifyNode = false;
 		shouldAddEdge = false;
 		shouldDeleteEdge = false;
-		
+
 		// Resets the name of the Node and Edge menus.
 		nodeOptions.setText("Adding Node");
 		edgeOptions.setText("Edge Options");
-		
+
 		// Selected node booleans.
 		oneSelected = false;
 		twoSelected = false;
-		
+
 		// Reset the number of clicks.
 		numberClicks = 0;
-		
+
 		// Reset node locations.
 		firstNodeLoc = -1;
 		secondNodeLoc = -1;
