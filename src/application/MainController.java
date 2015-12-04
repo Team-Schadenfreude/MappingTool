@@ -138,8 +138,6 @@ public class MainController implements Initializable {
 	@FXML
 	private MenuButton edgeOptions = new MenuButton();
 
-	private int imageWidth = 0;
-	private int imageHeight = 0;
 	private int duplicateNode = 1;
 	private int firstNodeLoc = -1;
 	private int secondNodeLoc = -1;
@@ -165,7 +163,7 @@ public class MainController implements Initializable {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+
 		pane.setStyle("-fx-background-color: #545352;");
 
 		nodeOptions.getItems().remove(0);
@@ -203,7 +201,6 @@ public class MainController implements Initializable {
 						// System.out.println(event.getY());
 						// System.out.println(event.getX());
 
-						GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 						// imageCanvas.getGraphicsContext2D().clearRect(0,
 						// 0, imageCanvas.getWidth(),
 						// imageCanvas.getHeight());
@@ -427,8 +424,6 @@ public class MainController implements Initializable {
 						mapView.setImage(image);
 
 						loadMap1.setText(selectedFile.getName());
-						imageWidth = (int) image.getWidth();
-						imageHeight = (int) image.getHeight();
 						// mapView.setFitHeight(440);
 						/// mapView.setFitWidth(1000);
 						// mapView.setImage(image);
@@ -604,7 +599,6 @@ public class MainController implements Initializable {
 								edgeNodes.add(mapNodes.get(firstNodeLoc));
 								edgeNodes.add(mapNodes.get(secondNodeLoc));
 								// System.out.println(mapNodes.get(firstNodeLoc).neighbors);
-								GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 								renderEverything();
 								event.consume();
 
@@ -831,7 +825,6 @@ public class MainController implements Initializable {
 	}
 
 	protected void renderEdges() {
-		List<Node> edgeNodes = new ArrayList<Node>();
 
 		GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 
@@ -1042,15 +1035,6 @@ public class MainController implements Initializable {
 		}
 	}
 
-	private Node findTransNode(String name, List<Node> mapTransNodes) {
-		for (Node n : mapTransNodes) {
-			if (n.nodeName == name) {
-				return n;
-			}
-		}
-		return null;
-	}
-
 	private static void saveMapEdges(String fileName) {
 
 		try {
@@ -1120,7 +1104,7 @@ public class MainController implements Initializable {
 		shouldDeleteEdge = false;
 
 		// Resets the name of the Node and Edge menus.
-		nodeOptions.setText("Adding Node");
+		nodeOptions.setText("Node Options");
 		edgeOptions.setText("Edge Options");
 
 		// Selected node booleans.
