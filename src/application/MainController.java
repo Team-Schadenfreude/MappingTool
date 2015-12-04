@@ -750,16 +750,13 @@ public class MainController implements Initializable {
 				System.out.println(twoSelected);
 				oneSelected = false;
 				twoSelected = false;
-				clearTrue();
 				shouldAddEdge = false;
 				shouldAddNode = false;
 				shouldDeleteNode = false;
 				shouldShowEdges = false;
-				clearTrue();
 				edgeOptions.setText("Deleting Edge");
 				nodeOptions.setText("Node Options");
 				System.out.println(oneSelected);
-				clearTrue();
 				System.out.println(twoSelected);
 
 				System.out.println("Starting");
@@ -1157,11 +1154,6 @@ public class MainController implements Initializable {
 
 			}
 		}
-	}
-
-	private void clearTrue() {
-		oneSelected = false;
-		twoSelected = false;
 	}
 
 	private Node findTransNode(String name, List<Node> mapTransNodes) {
