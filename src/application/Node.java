@@ -24,8 +24,7 @@ public class Node{
 	public List<Node> neighbors = new ArrayList<Node>();
 	public String map;
 	public boolean isTransitionNode = false;
-	public Circle circle = new Circle(xPos,yPos,100);
-    
+	public String type;
     //constructor for node
     public Node(String nodeName, double hValue,double gValue,double fValue, Boolean isObstacle, int xPos, int yPos,String description){
             this.nodeName = nodeName;
@@ -38,7 +37,7 @@ public class Node{
             this.map = map;
             this.zPos = zPos;
     }
-    public Node(String nodeName,int xPos, int yPos,int zpos, String map,String description)
+    public Node(String nodeName,int xPos, int yPos,int zpos, String map,String description,String type)
     {
     	this.nodeName = nodeName;
     	this.hValue = 0;
@@ -47,14 +46,14 @@ public class Node{
         this.xPos = xPos;
         this.yPos = yPos;
         this.map = map;
-        this.circle=circle;
         this.description=  description;
+        this.type = type;
     }
 
     //function to turn stringName into an actual string name.
     //Why do we have to do this? Because Java is stupid. JK, Java Master Race
     public String toString(){
-            return nodeName;
+            return description;
     }
     
     

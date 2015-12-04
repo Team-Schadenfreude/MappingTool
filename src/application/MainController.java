@@ -210,7 +210,7 @@ public class MainController implements Initializable {
 								// at " + event.getX() + " " +
 								// event.getY());
 								Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
-										nodeMapName, "");
+										nodeMapName, "","");
 								mapNodes.add(node);
 								clearCanvas();
 								renderEverything();
@@ -243,7 +243,7 @@ public class MainController implements Initializable {
 						if (duplicateNode == 0) {
 							// System.out.println("In duplicate node");
 							Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
-									nodeMapName, "");
+									nodeMapName, "","");
 							mapNodes.add(node);
 							renderEverything();
 							// System.out.println(mapNodes);
@@ -934,6 +934,7 @@ public class MainController implements Initializable {
 		int nodeMapIndex = 4;
 		int nodeDescIndex = 5;
 		int nodeTransIndex = 6;
+		int nodeTypeIndex = 7;
 
 		try {
 
@@ -951,7 +952,8 @@ public class MainController implements Initializable {
 				if (nodeData[nodeTransIndex] != null) {
 					isTrans = Boolean.valueOf(nodeData[nodeTransIndex]);
 				}
-				Node newNode = new Node(name, x, y, z, map, description);
+				String type = nodeData[nodeTypeIndex];
+				Node newNode = new Node(name, x, y, z, map, description,type);
 				newNode.isTransitionNode = isTrans;
 				nodeList.add(newNode);
 			}
@@ -985,7 +987,7 @@ public class MainController implements Initializable {
 		int nodeMapIndex = 4;
 		int nodeDescIndex = 5;
 		int nodeTransIndex = 6;
-
+		int nodeTypeIndex = 7;
 		try {
 
 			br = new BufferedReader(new FileReader(filePath));
@@ -1002,7 +1004,8 @@ public class MainController implements Initializable {
 				if (nodeData[nodeTransIndex] != null) {
 					isTrans = Boolean.valueOf(nodeData[nodeTransIndex]);
 				}
-				Node newNode = new Node(name, x, y, z, map, description);
+				String type = nodeData[nodeTypeIndex];
+				Node newNode = new Node(name, x, y, z, map, description,type);
 				newNode.isTransitionNode = isTrans;
 				nodeList.add(newNode);
 			}

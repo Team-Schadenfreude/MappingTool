@@ -11,15 +11,14 @@
    <children>
       <ImageView fx:id="mapView" layoutX="0.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="name" layoutX="14.0" layoutY="326.0" stylesheets="@application.css" text="Node Name" />
-      <TextField fx:id="nodeName" layoutX="14.0" layoutY="343.0" stylesheets="@application.css" />
-      <Label fx:id="description" layoutX="195.0" layoutY="326.0" stylesheets="@application.css" text="Node Description" />
-      <TextField fx:id="nodeDescription" layoutX="195.0" layoutY="343.0" stylesheets="@application.css" />
+      <TextField fx:id="nodeName" layoutX="14.0" layoutY="343.0" prefHeight="29.0" prefWidth="137.0" stylesheets="@application.css" />
+      <Label fx:id="description" layoutX="165.0" layoutY="326.0" stylesheets="@application.css" text="Node Description" />
+      <TextField fx:id="nodeDescription" layoutX="165.0" layoutY="343.0" prefHeight="29.0" prefWidth="137.0" stylesheets="@application.css" />
       <Button fx:id="genSupermap" layoutX="468.0" layoutY="322.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="122.0" stylesheets="@application.css" text="Save SuperMap" />
       <Button fx:id="loadMap1" layoutX="14.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" stylesheets="@application.css" text="Load Map 1" />
       <ComboBox fx:id="map1Dropdown" layoutX="123.0" layoutY="35.0" prefHeight="25.0" prefWidth="37.0" stylesheets="@application.css" />
       <Button fx:id="loadMap2" layoutX="234.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" stylesheets="@application.css" text="Load Map 2" />
       <ComboBox fx:id="map2Dropdown" layoutX="344.0" layoutY="35.0" prefHeight="25.0" prefWidth="37.0" stylesheets="@application.css" />
-      <CheckBox fx:id="isTransitionCheckbox" layoutX="358.0" layoutY="347.0" mnemonicParsing="false" stylesheets="@application.css" text="Transition" />
       <Button fx:id="makeTransButton" layoutX="468.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" stylesheets="@application.css" text="Make Transition" />
       <MenuButton fx:id="nodeOptions" layoutX="468.0" layoutY="91.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" stylesheets="@application.css" text="Node Options">
         <items>
@@ -43,5 +42,7 @@
       <Label fx:id="map2" layoutX="234.0" layoutY="14.0" prefHeight="17.0" prefWidth="102.0" stylesheets="@application.css" text="Map #2" />
       <Label fx:id="node1" layoutX="123.0" layoutY="14.0" stylesheets="@application.css" text="Node" />
       <Label fx:id="node2" layoutX="343.0" layoutY="14.0" stylesheets="@application.css" text="Node" />
+      <ComboBox fx:id="typeBox" layoutX="309.0" layoutY="343.0" prefHeight="17.0" prefWidth="71.0" stylesheets="@application.css" />
+      <Label fx:id="type" layoutX="311.0" layoutY="326.0" stylesheets="@application.css" text="Type" />
    </children>
 </Pane>
