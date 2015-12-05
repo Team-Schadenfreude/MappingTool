@@ -194,10 +194,6 @@ public class MainController implements Initializable {
 				shouldAddNode = true;
 				nodeOptions.setText("Adding Node");
 
-				if (!shouldAddNode) {
-					imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
-				}
-
 				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
 					@Override
@@ -246,7 +242,10 @@ public class MainController implements Initializable {
 								}
 							}
 						}
-						if (duplicateNode == 0) {
+						
+						if (!shouldAddNode) {
+							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
+						} else if (duplicateNode == 0) {
 							// System.out.println("In duplicate node");
 							Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
 									nodeMapName, "","None");
@@ -366,6 +365,7 @@ public class MainController implements Initializable {
 
 				resetAllVariables();
 				shouldModifyNode = true;
+				
 				if(currentNodeLoc!=-1){
 					typeBox.setPromptText("Node Type");
 				}
@@ -377,10 +377,11 @@ public class MainController implements Initializable {
 					public void handle(MouseEvent event) {
 						
 
-						if (!shouldModifyNode) {
+						if (!shouldModifyNode || shouldAddNode) {
 							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 						}
-						System.out.println("Restarting Event Handler");
+						
+						//System.out.println("Restarting Event Handler");
 						typeBox.setPromptText("Node Type");
 						clearCanvas();
 						renderEverything();
