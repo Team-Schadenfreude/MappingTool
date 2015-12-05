@@ -58,6 +58,8 @@ public class MainController implements Initializable {
 	static List<String> typeList = new ArrayList<String>();
 	static List<Node> map1TransitionNodes = new ArrayList<Node>();
 	static List<Node> map2TransitionNodes = new ArrayList<Node>();
+	static List<Node> tempMapTransitionNodes = new ArrayList<Node>();
+
 	static List<Node> edgeNodes = new ArrayList<Node>();
 
 	@FXML
@@ -542,6 +544,10 @@ public class MainController implements Initializable {
 						Main.primaryStage.centerOnScreen();
 						node2.setLayoutX(map2Dropdown.getLayoutX());
 						setTypes();
+						System.out.println(mapNodes);
+						System.out.println(map1TransitionNodes.get(0).neighbors);
+						System.out.println(map1TransitionNodes.get(1).neighbors);
+
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
@@ -915,7 +921,10 @@ public class MainController implements Initializable {
 		int edgeY1Index = 1;
 		int edgeX2Index = 4;
 		int edgeY2Index = 5;
-
+		int edge1map = 3;
+		int edge2map =7;
+		String map1 ="";
+		String map2="";
 		try {
 
 			br = new BufferedReader(new FileReader(filePath));
@@ -927,6 +936,10 @@ public class MainController implements Initializable {
 				int y1 = Integer.parseInt(edgeData[edgeY1Index]);
 				int x2 = Integer.parseInt(edgeData[edgeX2Index]);
 				int y2 = Integer.parseInt(edgeData[edgeY2Index]);
+				map1 = edgeData[edge1map];
+				map2 = edgeData[edge2map];
+				System.out.println(map1+" "+map2);
+				
 				// System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
 				Node n1 = findNodeByXY(nodeList, x1, y1);
 				Node n2 = findNodeByXY(nodeList, x2, y2);
@@ -945,6 +958,9 @@ public class MainController implements Initializable {
 
 				} else {
 					System.out.println("Transition");
+					Node node = new Node("",x2,y2,0,map2,"","");
+					tempMapTransitionNodes.add(node);
+					n1.neighbors.add(node);
 				}
 			}
 
@@ -961,6 +977,7 @@ public class MainController implements Initializable {
 				}
 			}
 		}
+		System.out.println("Here"+tempMapTransitionNodes);
 	}
 
 	public static Node findNodeByXY(List<Node> nodeList, int x, int y)// Want to
