@@ -320,9 +320,9 @@ public class MainController implements Initializable {
 			}
 
 		});
-		
-		
-		
+
+
+
 		nodeDescription.setOnAction(new EventHandler() {
 
 			@Override
@@ -366,17 +366,22 @@ public class MainController implements Initializable {
 
 				resetAllVariables();
 				shouldModifyNode = true;
+				if(currentNodeLoc!=-1){
+					typeBox.setPromptText("Node Type");
+				}
 				nodeOptions.setText("Modifying Node");
 
 				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
 					@Override
 					public void handle(MouseEvent event) {
+						
 
 						if (!shouldModifyNode) {
 							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 						}
-
+						System.out.println("Restarting Event Handler");
+						typeBox.setPromptText("Node Type");
 						clearCanvas();
 						renderEverything();
 						nodeName.setStyle(null);
@@ -401,6 +406,16 @@ public class MainController implements Initializable {
 								gc.setFill(Color.RED);
 								gc.fillOval((double) mapNodes.get(i).xPos + 4, (double) mapNodes.get(i).yPos + 4, 22,
 										22);
+
+								if(mapNodes.get(currentNodeLoc).type != ""){
+									System.out.println("In setting of box");
+									//typeBox.setPromptText(mapNodes.get(currentNodeLoc).type);
+									typeBox.setAccessibleText("Penis");
+									System.out.println(mapNodes.get(currentNodeLoc).type);
+								} else {
+									typeBox.setPromptText("Node Type");
+
+								}
 							}
 						}
 					}
@@ -409,6 +424,18 @@ public class MainController implements Initializable {
 			}
 		});
 
+
+
+		typeBox.setOnAction(new EventHandler(){
+
+			@Override
+			public void handle(Event arg0) {
+
+				mapNodes.get(currentNodeLoc).type = typeBox.getSelectionModel().getSelectedItem();
+				System.out.println(mapNodes.get(currentNodeLoc).type);
+			}
+
+		});
 		loadMap1.setOnAction(new EventHandler() {
 
 			@Override
@@ -449,7 +476,7 @@ public class MainController implements Initializable {
 						map1Dropdown.setItems(FXCollections.observableArrayList(map1TransitionNodes));
 						imageCanvas.setHeight(img.getHeight());
 						imageCanvas.setWidth(img.getWidth());
-						
+
 						stack.getChildren().addAll(mapView, imageCanvas);
 						// stack.getChildren().addAll(imageCanvas,mapView);
 						scrollImage.getTransforms().add(new Scale(.5, .5));
@@ -826,7 +853,10 @@ public class MainController implements Initializable {
 				writer.append(mapNodes.get(i).description);
 				writer.append(",");
 				writer.append(String.valueOf(mapNodes.get(i).isTransitionNode));
+				writer.append(",");
+				writer.append(mapNodes.get(i).type);
 				writer.append("\n");
+				
 				System.out.println("Print all map nodes.");
 				System.out.println(mapNodes.get(i).map);
 			}
@@ -1142,8 +1172,8 @@ public class MainController implements Initializable {
 		typeList.add("Room");
 		typeList.add("Stairs");
 		typeBox.setItems(FXCollections.observableArrayList(typeList));
-		
+
 	}
 
-	
+
 }
