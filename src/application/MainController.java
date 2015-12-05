@@ -101,7 +101,7 @@ public class MainController implements Initializable {
 	private Button genSupermap = new Button();
 
 	@FXML
-	private ComboBox<String> typeBox = new ComboBox();
+	private ComboBox<String> typeBox = new ComboBox<String>();
 
 	@FXML
 	private Label type;
@@ -110,7 +110,7 @@ public class MainController implements Initializable {
 	private Button loadMap1 = new Button();
 
 	@FXML
-	private ComboBox<Node> map1Dropdown = new ComboBox();
+	private ComboBox<Node> map1Dropdown = new ComboBox<Node>();
 
 	private MenuItem addEdge = new MenuItem("Add Edge");
 
@@ -128,7 +128,7 @@ public class MainController implements Initializable {
 	private ScrollPane scrollImage = new ScrollPane();
 
 	@FXML
-	private ComboBox<Node> map2Dropdown = new ComboBox();
+	private ComboBox<Node> map2Dropdown = new ComboBox<Node>();
 
 	@FXML
 	private CheckBox isTransitionCheckbox = new CheckBox();
