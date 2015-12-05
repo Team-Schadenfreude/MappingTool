@@ -410,7 +410,7 @@ public class MainController implements Initializable {
 
 								if(mapNodes.get(currentNodeLoc).type != ""){
 									System.out.println("In setting of box");
-									typeBox.setPromptText(mapNodes.get(currentNodeLoc).type);
+									typeBox.setValue(mapNodes.get(currentNodeLoc).type);
 									System.out.println(mapNodes.get(currentNodeLoc).type);
 									
 								} else {
