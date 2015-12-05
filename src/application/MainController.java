@@ -216,7 +216,7 @@ public class MainController implements Initializable {
 								// at " + event.getX() + " " +
 								// event.getY());
 								Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
-										nodeMapName, "","");
+										nodeMapName, "","None");
 								mapNodes.add(node);
 								clearCanvas();
 								renderEverything();
@@ -249,7 +249,7 @@ public class MainController implements Initializable {
 						if (duplicateNode == 0) {
 							// System.out.println("In duplicate node");
 							Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
-									nodeMapName, "","");
+									nodeMapName, "","None");
 							mapNodes.add(node);
 							renderEverything();
 							// System.out.println(mapNodes);
@@ -409,9 +409,9 @@ public class MainController implements Initializable {
 
 								if(mapNodes.get(currentNodeLoc).type != ""){
 									System.out.println("In setting of box");
-									//typeBox.setPromptText(mapNodes.get(currentNodeLoc).type);
-									typeBox.setAccessibleText("Penis");
+									typeBox.setPromptText(mapNodes.get(currentNodeLoc).type);
 									System.out.println(mapNodes.get(currentNodeLoc).type);
+									
 								} else {
 									typeBox.setPromptText("Node Type");
 
@@ -977,6 +977,7 @@ public class MainController implements Initializable {
 		int nodeDescIndex = 5;
 		int nodeTransIndex = 6;
 		int nodeTypeIndex = 7;
+		String type;
 
 		try {
 
@@ -994,7 +995,13 @@ public class MainController implements Initializable {
 				if (nodeData[nodeTransIndex] != null) {
 					isTrans = Boolean.valueOf(nodeData[nodeTransIndex]);
 				}
-				String type = nodeData[nodeTypeIndex];
+				if(nodeData[nodeTypeIndex] == null){
+					type = "None";
+				} else {
+					type = nodeData[nodeTypeIndex];
+				}
+				
+				
 				Node newNode = new Node(name, x, y, z, map, description,type);
 				newNode.isTransitionNode = isTrans;
 				nodeList.add(newNode);
@@ -1030,6 +1037,8 @@ public class MainController implements Initializable {
 		int nodeDescIndex = 5;
 		int nodeTransIndex = 6;
 		int nodeTypeIndex = 7;
+		String type;
+
 		try {
 
 			br = new BufferedReader(new FileReader(filePath));
@@ -1046,7 +1055,13 @@ public class MainController implements Initializable {
 				if (nodeData[nodeTransIndex] != null) {
 					isTrans = Boolean.valueOf(nodeData[nodeTransIndex]);
 				}
-				String type = nodeData[nodeTypeIndex];
+				
+				if(nodeData[nodeTypeIndex] != null){
+					type = nodeData[nodeTypeIndex];
+				} else {
+					type = "None";
+				}
+				
 				Node newNode = new Node(name, x, y, z, map, description,type);
 				newNode.isTransitionNode = isTrans;
 				nodeList.add(newNode);
