@@ -900,14 +900,19 @@ public class MainController implements Initializable {
 
 		for (int i = 0; i < mapNodes.size() - 1; i++) {
 			for (int j = 0; j < mapNodes.get(i).neighbors.size(); j++) {
-
-				int x1 = mapNodes.get(i).xPos + 15;
-				int y1 = mapNodes.get(i).yPos + 15;
-				int x2 = mapNodes.get(i).neighbors.get(j).xPos + 15;
-				int y2 = mapNodes.get(i).neighbors.get(j).yPos + 15;
-				gc.setLineWidth(4);
-				gc.setStroke(Color.BLUE);
-				gc.strokeLine(x1, y1, x2, y2);
+				
+				if (mapNodes.get(i).map.equals(mapNodes.get(i).neighbors.get(j).map)){
+					int x1 = mapNodes.get(i).xPos + 15;
+					int y1 = mapNodes.get(i).yPos + 15;
+					int x2 = mapNodes.get(i).neighbors.get(j).xPos + 15;
+					int y2 = mapNodes.get(i).neighbors.get(j).yPos + 15;
+					gc.setLineWidth(4);
+					gc.setStroke(Color.BLUE);
+					gc.strokeLine(x1, y1, x2, y2);
+				} else {
+					// Nothing...
+				}
+	
 			}
 
 		}
