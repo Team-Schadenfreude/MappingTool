@@ -431,9 +431,30 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event arg0) {
-
+				
+				
 				mapNodes.get(currentNodeLoc).type = typeBox.getSelectionModel().getSelectedItem();
 				System.out.println(mapNodes.get(currentNodeLoc).type);
+				String isTrans = mapNodes.get(currentNodeLoc).type;
+				switch(isTrans){
+				case "Stairs":
+					mapNodes.get(currentNodeLoc).isTransitionNode = true;
+					break;
+					
+				case "Entrance":
+					mapNodes.get(currentNodeLoc).isTransitionNode = true;
+					break;
+					
+				case "Elevator":
+					mapNodes.get(currentNodeLoc).isTransitionNode = true;
+					break;
+					
+					default:
+						mapNodes.get(currentNodeLoc).isTransitionNode = false;
+
+				}
+			
+				renderEverything();
 			}
 
 		});
