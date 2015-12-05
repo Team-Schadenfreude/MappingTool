@@ -43,6 +43,5 @@
       <Label fx:id="node1" layoutX="123.0" layoutY="14.0" stylesheets="@application.css" text="Node" />
       <Label fx:id="node2" layoutX="343.0" layoutY="14.0" stylesheets="@application.css" text="Node" />
       <ComboBox fx:id="typeBox" layoutX="468.0" layoutY="200.0" prefHeight="31.0" prefWidth="122.0" promptText="Node Type" stylesheets="@application.css" visibleRowCount="3" />
-      <Label fx:id="type" layoutX="311.0" layoutY="326.0" stylesheets="@application.css" text="Type" />
    </children>
 </Pane>
