@@ -155,12 +155,19 @@ public class MainController implements Initializable {
 	private int duplicateNode = 1;
 	private int firstNodeLoc = -1;
 	private int secondNodeLoc = -1;
+	private int nodeSizeReg =30;
+	private int nodeSizeRegY;
+	private int nodeSizeCampus = nodeSizeReg/2;
+	private int nodeSizeCampusY;
+
+
 	public static boolean mapLoaded = false;
 	private volatile int numberClicks = 0;
 	private boolean doOnce = true;
 	private int currentNodeLoc = -1;
 	private String nodeMapName;
 	private static String path;
+	private boolean isCampus = false;
 	private static boolean shouldAddNode = false;
 	private static boolean shouldDeleteNode = false;
 	private static boolean shouldAddEdge = false;
@@ -232,10 +239,10 @@ public class MainController implements Initializable {
 						} else {
 
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 									// System.out.println("Node already
 									// exists here");
 									// System.out.println(mapNodes.get(i).xPos);
@@ -287,10 +294,10 @@ public class MainController implements Initializable {
 					public void handle(MouseEvent event) {
 						if (shouldDeleteNode) {
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 									fixEdges(mapNodes.get(i));
 									mapNodes.remove(i);
 									clearCanvas();
@@ -399,10 +406,10 @@ public class MainController implements Initializable {
 							
 							
 							
-							if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-									&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-									&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-									&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+							if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
+									&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
+									&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
+									&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 								showNodeData();
 								currentNodeLoc = i;
 								nodeName.setText(mapNodes.get(i).nodeName);
@@ -484,7 +491,9 @@ public class MainController implements Initializable {
 					nodeMapName = selectedFile.getName();
 					try {
 						clearCanvas();
+						
 						img = ImageIO.read(new File(Paths.get(path + "map.png").toString()));
+						
 						image = SwingFXUtils.toFXImage(img, null);
 
 						mapView.setImage(image);
@@ -558,6 +567,90 @@ public class MainController implements Initializable {
 						System.out.println(map1TransitionNodes.get(1).neighbors);
 
 					} catch (IOException ex) {
+						
+						System.out.println("Failed");
+						if(img==null){
+							System.out.println("Found Campus Map");
+							try {
+								img = ImageIO.read(new File(Paths.get(path + "campus.png").toString()));
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							isCampus = true;
+							nodeSizeReg = nodeSizeCampus;
+							image = SwingFXUtils.toFXImage(img, null);
+
+							mapView.setImage(image);
+						    mapView.preserveRatioProperty().set(true);
+
+							loadMap1.setText(selectedFile.getName());
+							// mapView.setFitHeight(440);
+							/// mapView.setFitWidth(1000);
+							// mapView.setImage(image);
+
+							// System.out.println(imageWidth);
+							// nodeOptions.setLayoutX(1020);
+							// edgeOptions.setLayoutX(1020);
+							mapNodes.clear();
+
+							genSupermap.setLayoutX(1020);
+							genSupermap.setLayoutY(nodeName.getLayoutY() - 21);
+							getNodesFromFile1(Paths.get(path + "mapNodes.csv").toString());
+							checkForTransNodes(mapNodes, map1TransitionNodes);
+							connectEdgesFromFile(mapNodes, Paths.get(path + "mapEdges.csv").toString());
+							map1Dropdown.setItems(FXCollections.observableArrayList(map1TransitionNodes));
+							imageCanvas.setHeight(img.getHeight());
+							imageCanvas.setWidth(img.getWidth());
+
+							stack.getChildren().addAll(mapView, imageCanvas);
+
+							// stack.getChildren().addAll(imageCanvas,mapView);
+							scrollImage.getTransforms().add(new Scale(.5, .5));
+
+							scrollImage.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+							scrollImage.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+							scrollImage.setContent(stack);
+							scrollImage.setPrefHeight(900);
+							scrollImage.setPrefWidth(1950);
+
+							scrollImage.autosize();
+
+							mapLoaded = true;
+							nodeOptions.setLayoutX(scrollImage.getWidth() - 935);
+							edgeOptions.setLayoutX(scrollImage.getWidth() - 935);
+							edgeOptions.setLayoutY(scrollImage.getHeight() - 650);
+							genSupermap.setLayoutX(scrollImage.getWidth() - 935);
+							genSupermap.setLayoutY(scrollImage.getHeight() - 370);
+							typeBox.setLayoutX(scrollImage.getWidth() - 935);
+							typeBox.setLayoutY(scrollImage.getHeight() - 490);
+
+							nodeName.setLayoutY(scrollImage.getHeight() - 335);
+							nodeDescription.setLayoutY(scrollImage.getHeight() - 335);
+							nodeDescription.setLayoutX(nodeName.getLayoutX() + nodeName.getWidth() + 20);
+							name.setLayoutY(nodeName.getLayoutY() - 19);
+							//edgeOptions.setLayoutY(280);
+							description.setLayoutY(nodeDescription.getLayoutY() - 19);
+							description.setLayoutX(nodeDescription.getLayoutX());
+							isTransitionCheckbox.setLayoutY(nodeName.getLayoutY() + 4);
+							isTransitionCheckbox.setLayoutX(nodeDescription.getLayoutX() + nodeDescription.getWidth() + 5);
+							map1Dropdown.setPrefWidth(160);
+							loadMap2.setLayoutX(300);
+							// map2.setLayoutX(500);
+							map2.setLayoutX(loadMap2.getLayoutX());
+							map2Dropdown.setLayoutX(loadMap2.getLayoutX() + 7 + loadMap2.getWidth());
+							map2Dropdown.setPrefWidth(160);
+							makeTransButton.setLayoutX(map2Dropdown.getLayoutX() + map2Dropdown.getWidth() + 150);
+							Main.primaryStage.setWidth(1175);
+							Main.primaryStage.setHeight(650);
+							renderEverything();
+							Main.primaryStage.centerOnScreen();
+							node2.setLayoutX(map2Dropdown.getLayoutX());
+							setTypes();
+							System.out.println(mapNodes);
+							System.out.println(map1TransitionNodes.get(0).neighbors);
+							System.out.println(map1TransitionNodes.get(1).neighbors);
+						}
 						ex.printStackTrace();
 					}
 				}
@@ -574,8 +667,8 @@ public class MainController implements Initializable {
 				  	
 					mapView.setFitWidth(zoomProperty.get() * 2);
 			        mapView.setFitHeight(zoomProperty.get() * 3);
-			        imageCanvas.setScaleX(zoomProperty.get() / 1600);
-			        imageCanvas.setScaleY(zoomProperty.get() / 1600);
+			        imageCanvas.setScaleX(zoomProperty.get() / 1650);
+			        imageCanvas.setScaleY(zoomProperty.get() / 1650);
 
 			        scrollImage.setContent(stack);
 
@@ -654,10 +747,10 @@ public class MainController implements Initializable {
 
 						if (numberClicks == 0) {
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 									firstNodeLoc = i;
 									numberClicks += 1;
 									
@@ -667,10 +760,10 @@ public class MainController implements Initializable {
 							}
 						} else if (numberClicks != 0) {
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 									secondNodeLoc = i;
 									numberClicks = 2;
 									shouldMakeEdge = true;
@@ -784,10 +877,10 @@ public class MainController implements Initializable {
 
 							for (int i = 0; i < mapNodes.size(); i++) {
 
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 									oneSelected = true;
 									firstNodeLoc = i;
 									highlightNode(i);
@@ -800,10 +893,10 @@ public class MainController implements Initializable {
 
 							for (int i = 0; i < mapNodes.size(); i++) {
 
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - 30
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + 30
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - 30
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + 30) {
+								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 									twoSelected = true;
 									highlightNode(i);
 									secondNodeLoc = i;
@@ -854,7 +947,7 @@ public class MainController implements Initializable {
 		for (Node n : mapNodes) {
 			GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 			gc.setFill(Color.RED);
-			gc.fillOval(n.xPos, n.yPos, 30, 30);
+			gc.fillOval(n.xPos, n.yPos, nodeSizeReg, nodeSizeReg);
 		}
 
 	}
@@ -1195,9 +1288,9 @@ public class MainController implements Initializable {
 			if (n.isTransitionNode == true) {
 				GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 				gc.setFill(Color.BLUE);
-				gc.fillRect(n.xPos - .75, n.yPos - .75, 40, 40);
+				gc.fillRect(n.xPos - .75, n.yPos - .75, nodeSizeReg+10, nodeSizeReg+10);
 				gc.setFill(Color.WHITE);
-				gc.fillOval(n.xPos + 4, n.yPos + 4, 30, 30);
+				gc.fillOval(n.xPos + 4, n.yPos + 4, nodeSizeReg, nodeSizeReg);
 			}
 		}
 	}
@@ -1257,16 +1350,16 @@ public class MainController implements Initializable {
 		 
 		 if (mapNodes.get(iterator).isTransitionNode) {
 			 gc.setFill(Color.GOLD);
-				gc.fillRect((double) mapNodes.get(iterator).xPos-.75, (double) mapNodes.get(iterator).yPos-.75, 40, 40);
+				gc.fillRect((double) mapNodes.get(iterator).xPos-.75, (double) mapNodes.get(iterator).yPos-.75, nodeSizeReg+10, nodeSizeReg+10);
 				gc.setFill(Color.WHITE);
-				gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, 30,
-						30);
+				gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, nodeSizeReg,
+						nodeSizeReg);
 		 } else {
 			gc.setFill(Color.GOLD);
-			gc.fillOval((double) mapNodes.get(iterator).xPos, (double) mapNodes.get(iterator).yPos, 30, 30);
+			gc.fillOval((double) mapNodes.get(iterator).xPos, (double) mapNodes.get(iterator).yPos, nodeSizeReg, nodeSizeReg);
 			gc.setFill(Color.RED);
-			gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, 22,
-					22);
+			gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, nodeSizeReg-8,
+					nodeSizeReg-8);
 		 }
 	 }
 
