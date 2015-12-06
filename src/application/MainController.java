@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 // JavaFX Imports
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
@@ -40,6 +44,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
@@ -52,6 +57,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 public class MainController implements Initializable {
+    DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
 
 	static List<Node> mapNodes = new ArrayList<Node>();
 	static List<Node> mapNodes2 = new ArrayList<Node>();
@@ -481,6 +487,7 @@ public class MainController implements Initializable {
 						image = SwingFXUtils.toFXImage(img, null);
 
 						mapView.setImage(image);
+					    mapView.preserveRatioProperty().set(true);
 
 						loadMap1.setText(selectedFile.getName());
 						// mapView.setFitHeight(440);
@@ -502,6 +509,7 @@ public class MainController implements Initializable {
 						imageCanvas.setWidth(img.getWidth());
 
 						stack.getChildren().addAll(mapView, imageCanvas);
+
 						// stack.getChildren().addAll(imageCanvas,mapView);
 						scrollImage.getTransforms().add(new Scale(.5, .5));
 
@@ -555,6 +563,38 @@ public class MainController implements Initializable {
 			}
 		});
 
+		
+		zoomProperty.addListener(new InvalidationListener() {
+		      
+
+			@Override
+			public void invalidated(Observable arg0) {
+				// TODO Auto-generated method stub
+				  	
+					mapView.setFitWidth(zoomProperty.get() * 2);
+			        mapView.setFitHeight(zoomProperty.get() * 3);
+			        imageCanvas.setScaleX(zoomProperty.get() / 1600);
+			        imageCanvas.setScaleY(zoomProperty.get() / 1600);
+
+			        scrollImage.setContent(stack);
+
+			}
+		    });
+		
+		
+		
+		scrollImage.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
+		      @Override
+		      public void handle(ScrollEvent event) {
+		        if (event.getDeltaY() > 0) {
+		          zoomProperty.set(zoomProperty.get() * 1.2);
+		        } else if (event.getDeltaY() < 0) {
+		          zoomProperty.set(zoomProperty.get() / 1.1);
+		        }
+		      }
+		    });
+		
+		
 		loadMap2.setOnAction(new EventHandler() {
 
 			@Override
