@@ -226,7 +226,7 @@ public class MainController implements Initializable {
 								// System.out.println("Creating new node
 								// at " + event.getX() + " " +
 								// event.getY());
-								Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
+								Node node = new Node("node", (int) event.getX() - nodeSizeReg/2, (int) event.getY() - nodeSizeReg/2, 0,
 										nodeMapName, "","None");
 								mapNodes.add(node);
 								clearCanvas();
@@ -262,7 +262,7 @@ public class MainController implements Initializable {
 							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 						} else if (duplicateNode == 0) {
 							// System.out.println("In duplicate node");
-							Node node = new Node("node", (int) event.getX() - 15, (int) event.getY() - 15, 0,
+							Node node = new Node("node", (int) event.getX() - nodeSizeReg/2, (int) event.getY() - nodeSizeReg/2, 0,
 									nodeMapName, "","None");
 							mapNodes.add(node);
 							renderEverything();
