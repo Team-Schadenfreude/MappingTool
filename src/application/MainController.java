@@ -242,27 +242,27 @@ public class MainController implements Initializable {
 							double eventXTemp = event.getX() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
 							double eventYTemp = event.getY() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= eventXPos - 5 - nodeSizeReg - SNAP_LENIENCY
-										&& mapNodes.get(i).xPos <= eventXPos - 5 + nodeSizeReg + SNAP_LENIENCY
-										&& mapNodes.get(i).yPos >= eventYPos - 5 - nodeSizeReg - SNAP_RANGE
-										&& mapNodes.get(i).yPos <= eventYPos - 5 + nodeSizeReg + SNAP_RANGE) {
+								if (mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg - SNAP_LENIENCY
+										&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg + SNAP_LENIENCY
+										&& mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg - SNAP_RANGE
+										&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg + SNAP_RANGE) {
 									// Makes sure your using the closest
 									// connection
-									if (Math.abs(event.getX() - mapNodes.get(i).xPos) < Math
+									if (Math.abs(event.getX() - mapNodes.get(i).getxPos()) < Math
 											.abs(event.getX() - eventXTemp)) {
-										eventXTemp = mapNodes.get(i).xPos + nodeSizeReg / 2;
+										eventXTemp = mapNodes.get(i).getxPos() + nodeSizeReg / 2;
 										changedX = true;
 										refNodeX = i;
 									}
 
 								}
-								if (mapNodes.get(i).yPos >= eventYPos - 5 - nodeSizeReg - SNAP_LENIENCY
-										&& mapNodes.get(i).yPos <= eventYPos - 5 + nodeSizeReg + SNAP_LENIENCY
-										&& mapNodes.get(i).xPos >= eventXPos - 5 - nodeSizeReg - SNAP_RANGE
-										&& mapNodes.get(i).xPos <= eventXPos - 5 + nodeSizeReg + SNAP_RANGE) {
-									if (Math.abs(event.getY() - mapNodes.get(i).yPos) < Math
+								if (mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg - SNAP_LENIENCY
+										&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg + SNAP_LENIENCY
+										&& mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg - SNAP_RANGE
+										&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg + SNAP_RANGE) {
+									if (Math.abs(event.getY() - mapNodes.get(i).getyPos()) < Math
 											.abs(event.getY() - eventYTemp)) {
-										eventYTemp = mapNodes.get(i).yPos + nodeSizeReg / 2;
+										eventYTemp = mapNodes.get(i).getyPos() + nodeSizeReg / 2;
 										changedY = true;
 										refNodeY = i;
 
@@ -297,10 +297,10 @@ public class MainController implements Initializable {
 						} else {
 
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= eventXPos - 5 - nodeSizeReg
-										&& mapNodes.get(i).xPos <= eventXPos - 5 + nodeSizeReg
-										&& mapNodes.get(i).yPos >= eventYPos - 5 - nodeSizeReg
-										&& mapNodes.get(i).yPos <= eventYPos - 5 + nodeSizeReg) {
+								if (mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg
+										&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg
+										&& mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg
+										&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg) {
 									// System.out.println("Node already
 									// exists here");
 									// System.out.println(mapNodes.get(i).xPos);
@@ -358,10 +358,10 @@ public class MainController implements Initializable {
 					public void handle(MouseEvent event) {
 						if (shouldDeleteNode) {
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
+								if (mapNodes.get(i).getxPos() >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getxPos() <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).getyPos() >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getyPos() <= event.getY() - 5 + nodeSizeReg) {
 									fixEdges(mapNodes.get(i));
 									mapNodes.remove(i);
 									clearCanvas();
@@ -393,7 +393,7 @@ public class MainController implements Initializable {
 			@Override
 			public void handle(Event arg0) {
 
-				mapNodes.get(currentNodeLoc).isTransitionNode = !mapNodes.get(currentNodeLoc).isTransitionNode;
+				mapNodes.get(currentNodeLoc).setTransitionNode(!mapNodes.get(currentNodeLoc).isTransitionNode());
 				renderTransitionNodes();
 			}
 
@@ -407,7 +407,7 @@ public class MainController implements Initializable {
 				resetSaveButton();
 
 				if (currentNodeLoc != -1) {
-					mapNodes.get(currentNodeLoc).description = nodeDescription.getText();
+					mapNodes.get(currentNodeLoc).setDescription(nodeDescription.getText());
 					nodeDescription.setStyle("-fx-text-fill: green;-fx-font-weight: bold;");
 
 				} else {
@@ -425,7 +425,7 @@ public class MainController implements Initializable {
 				resetSaveButton();
 
 				if (currentNodeLoc != -1) {
-					mapNodes.get(currentNodeLoc).nodeName = nodeName.getText();
+					mapNodes.get(currentNodeLoc).setNodeName(nodeName.getText());
 					nodeName.setStyle("-fx-text-fill: green;-fx-font-weight: bold;");
 
 				} else {
@@ -465,24 +465,23 @@ public class MainController implements Initializable {
 						nodeDescription.setStyle(null);
 						for (int i = 0; i < mapNodes.size(); i++) {
 
-							if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
-									&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
-									&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
-									&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
+							if (mapNodes.get(i).getxPos() >= event.getX() - 5 - nodeSizeReg
+									&& mapNodes.get(i).getxPos() <= event.getX() - 5 + nodeSizeReg
+									&& mapNodes.get(i).getyPos() >= event.getY() - 5 - nodeSizeReg
+									&& mapNodes.get(i).getyPos() <= event.getY() - 5 + nodeSizeReg) {
 								showNodeData();
 								currentNodeLoc = i;
-								nodeName.setText(mapNodes.get(i).nodeName);
-								nodeDescription.setText(mapNodes.get(i).description);
-								if (mapNodes.get(i).isTransitionNode) {
+								nodeName.setText(mapNodes.get(i).getNodeName());
+								nodeDescription.setText(mapNodes.get(i).getDescription());
+								if (mapNodes.get(i).isTransitionNode()) {
 									isTransitionCheckbox.setSelected(true);
 								} else {
 									isTransitionCheckbox.setSelected(false);
 								}
 
-								if (mapNodes.get(currentNodeLoc).type != "") {
+								if (mapNodes.get(currentNodeLoc).getType() != "") {
 									System.out.println("In setting of box");
-									typeBox.setValue(mapNodes.get(currentNodeLoc).type);
-									System.out.println(mapNodes.get(currentNodeLoc).type);
+									typeBox.setValue(mapNodes.get(currentNodeLoc).getType());
 
 								} else {
 									typeBox.setPromptText("Node Type");
@@ -503,24 +502,23 @@ public class MainController implements Initializable {
 			@Override
 			public void handle(Event arg0) {
 
-				mapNodes.get(currentNodeLoc).type = typeBox.getSelectionModel().getSelectedItem();
-				System.out.println(mapNodes.get(currentNodeLoc).type);
-				String isTrans = mapNodes.get(currentNodeLoc).type;
+				mapNodes.get(currentNodeLoc).setType(typeBox.getSelectionModel().getSelectedItem());
+				String isTrans = mapNodes.get(currentNodeLoc).getType();
 				switch (isTrans) {
 				case "Stairs":
-					mapNodes.get(currentNodeLoc).isTransitionNode = true;
+					mapNodes.get(currentNodeLoc).setTransitionNode(true);
 					break;
 
 				case "Entrance":
-					mapNodes.get(currentNodeLoc).isTransitionNode = true;
+					mapNodes.get(currentNodeLoc).setTransitionNode(true);
 					break;
 
 				case "Elevator":
-					mapNodes.get(currentNodeLoc).isTransitionNode = true;
+					mapNodes.get(currentNodeLoc).setTransitionNode(true);
 					break;
 
 				default:
-					mapNodes.get(currentNodeLoc).isTransitionNode = false;
+					mapNodes.get(currentNodeLoc).setTransitionNode(false);
 
 				}
 
@@ -702,8 +700,7 @@ public class MainController implements Initializable {
 							node2.setLayoutX(map2Dropdown.getLayoutX());
 							setTypes();
 							System.out.println(mapNodes);
-							System.out.println(map1TransitionNodes.get(0).neighbors);
-							System.out.println(map1TransitionNodes.get(1).neighbors);
+						
 							snap.setLayoutX(scrollImage.getWidth() - 935);
 
 						}
@@ -812,10 +809,10 @@ public class MainController implements Initializable {
 
 						if (numberClicks == 0) {
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
+								if (mapNodes.get(i).getxPos() >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getxPos() <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).getyPos() >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getyPos() <= event.getY() - 5 + nodeSizeReg) {
 									firstNodeLoc = i;
 									numberClicks += 1;
 
@@ -825,10 +822,10 @@ public class MainController implements Initializable {
 							}
 						} else if (numberClicks != 0) {
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
+								if (mapNodes.get(i).getxPos() >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getxPos() <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).getyPos() >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getyPos() <= event.getY() - 5 + nodeSizeReg) {
 									secondNodeLoc = i;
 									numberClicks = 2;
 									shouldMakeEdge = true;
@@ -845,9 +842,9 @@ public class MainController implements Initializable {
 							// System.out.println("Making an edge at " +
 							// firstNodeLoc + " " + secondNodeLoc);
 
-							if (!mapNodes.get(firstNodeLoc).neighbors.contains(mapNodes.get(secondNodeLoc))) {
-								mapNodes.get(firstNodeLoc).neighbors.add(mapNodes.get(secondNodeLoc));
-								mapNodes.get(secondNodeLoc).neighbors.add(mapNodes.get(firstNodeLoc));
+							if (!mapNodes.get(firstNodeLoc).getNeighbors().contains(mapNodes.get(secondNodeLoc))) {
+								mapNodes.get(firstNodeLoc).getNeighbors().add(mapNodes.get(secondNodeLoc));
+								mapNodes.get(secondNodeLoc).getNeighbors().add(mapNodes.get(firstNodeLoc));
 								edgeNodes.add(mapNodes.get(firstNodeLoc));
 								edgeNodes.add(mapNodes.get(secondNodeLoc));
 								// System.out.println(mapNodes.get(firstNodeLoc).neighbors);
@@ -909,12 +906,12 @@ public class MainController implements Initializable {
 
 				if (map1Dropdown.getSelectionModel().getSelectedItem() != null
 						&& map2Dropdown.getSelectionModel().getSelectedItem() != null) {
-					map1Dropdown.getSelectionModel().getSelectedItem().neighbors
+					map1Dropdown.getSelectionModel().getSelectedItem().getNeighbors()
 							.add(map2Dropdown.getSelectionModel().getSelectedItem());
-					map2Dropdown.getSelectionModel().getSelectedItem().neighbors
+					map2Dropdown.getSelectionModel().getSelectedItem().getNeighbors()
 							.add(map1Dropdown.getSelectionModel().getSelectedItem());
-					System.out.println(map1Dropdown.getSelectionModel().getSelectedItem().neighbors);
-					System.out.println(map2Dropdown.getSelectionModel().getSelectedItem().neighbors);
+					System.out.println(map1Dropdown.getSelectionModel().getSelectedItem().getNeighbors());
+					System.out.println(map2Dropdown.getSelectionModel().getSelectedItem().getNeighbors());
 
 				}
 			}
@@ -942,10 +939,10 @@ public class MainController implements Initializable {
 
 							for (int i = 0; i < mapNodes.size(); i++) {
 
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
+								if (mapNodes.get(i).getxPos() >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getxPos() <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).getyPos() >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getyPos() <= event.getY() - 5 + nodeSizeReg) {
 									oneSelected = true;
 									firstNodeLoc = i;
 									highlightNode(i);
@@ -958,10 +955,10 @@ public class MainController implements Initializable {
 
 							for (int i = 0; i < mapNodes.size(); i++) {
 
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
+								if (mapNodes.get(i).getxPos() >= event.getX() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getxPos() <= event.getX() - 5 + nodeSizeReg
+										&& mapNodes.get(i).getyPos() >= event.getY() - 5 - nodeSizeReg
+										&& mapNodes.get(i).getyPos() <= event.getY() - 5 + nodeSizeReg) {
 									twoSelected = true;
 									highlightNode(i);
 									secondNodeLoc = i;
@@ -976,10 +973,10 @@ public class MainController implements Initializable {
 							oneSelected = false;
 							twoSelected = false;
 
-							if (mapNodes.get(firstNodeLoc).neighbors.contains(mapNodes.get(secondNodeLoc))
-									&& mapNodes.get(secondNodeLoc).neighbors.contains(mapNodes.get(firstNodeLoc))) {
-								mapNodes.get(firstNodeLoc).neighbors.remove(mapNodes.get(secondNodeLoc));
-								mapNodes.get(secondNodeLoc).neighbors.remove(mapNodes.get(firstNodeLoc));
+							if (mapNodes.get(firstNodeLoc).getNeighbors().contains(mapNodes.get(secondNodeLoc))
+									&& mapNodes.get(secondNodeLoc).getNeighbors().contains(mapNodes.get(firstNodeLoc))) {
+								mapNodes.get(firstNodeLoc).getNeighbors().remove(mapNodes.get(secondNodeLoc));
+								mapNodes.get(secondNodeLoc).getNeighbors().remove(mapNodes.get(firstNodeLoc));
 								clearCanvas();
 								renderEverything();
 
@@ -1012,15 +1009,15 @@ public class MainController implements Initializable {
 		for (Node n : mapNodes) {
 			GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 			gc.setFill(Color.RED);
-			gc.fillOval(n.xPos, n.yPos, nodeSizeReg, nodeSizeReg);
+			gc.fillOval(n.getxPos(), n.getyPos(), nodeSizeReg, nodeSizeReg);
 		}
 
 	}
 
 	protected void fixEdges(Node node) {
 		for (Node n : mapNodes) {
-			if (n.neighbors.contains(node)) {
-				n.neighbors.remove(node);
+			if (n.getNeighbors().contains(node)) {
+				n.getNeighbors().remove(node);
 			}
 		}
 	}
@@ -1030,9 +1027,9 @@ public class MainController implements Initializable {
 		System.out.println("Showing node data.");
 
 		for (int i = 0; i < mapNodes.size(); i++) {
-			System.out.println(mapNodes.get(i).nodeName);
-			System.out.println(mapNodes.get(i).description);
-			System.out.println(mapNodes.get(i).isTransitionNode);
+			System.out.println(mapNodes.get(i).getNodeName());
+			System.out.println(mapNodes.get(i).getDescription());
+			System.out.println(mapNodes.get(i).isTransitionNode());
 		}
 
 	}
@@ -1043,25 +1040,25 @@ public class MainController implements Initializable {
 			FileWriter writer = new FileWriter(fileName);
 
 			for (int i = 0; i < mapNodes.size(); i++) {
-				writer.append(mapNodes.get(i).nodeName);
+				writer.append(mapNodes.get(i).getNodeName());
 				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).xPos));
+				writer.append(Integer.toString(mapNodes.get(i).getxPos()));
 				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).yPos));
+				writer.append(Integer.toString(mapNodes.get(i).getyPos()));
 				writer.append(',');
-				writer.append(Integer.toString(mapNodes.get(i).zPos));
+				writer.append(Integer.toString(mapNodes.get(i).getzPos()));
 				writer.append(',');
-				writer.append(mapNodes.get(i).map);
+				writer.append(mapNodes.get(i).getMap());
 				writer.append(",");
-				writer.append(mapNodes.get(i).description);
+				writer.append(mapNodes.get(i).getDescription());
 				writer.append(",");
-				writer.append(String.valueOf(mapNodes.get(i).isTransitionNode));
+				writer.append(String.valueOf(mapNodes.get(i).isTransitionNode()));
 				writer.append(",");
-				writer.append(mapNodes.get(i).type);
+				writer.append(mapNodes.get(i).getType());
 				writer.append("\n");
 
 				System.out.println("Print all map nodes.");
-				System.out.println(mapNodes.get(i).map);
+				System.out.println(mapNodes.get(i).getMap());
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -1074,14 +1071,14 @@ public class MainController implements Initializable {
 		GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 
 		for (int i = 0; i < mapNodes.size() - 1; i++) {
-			for (int j = 0; j < mapNodes.get(i).neighbors.size(); j++) {
+			for (int j = 0; j < mapNodes.get(i).getNeighbors().size(); j++) {
 
 				// Checks if both nodes are on the same map.
-				if (mapNodes.get(i).map.equals(mapNodes.get(i).neighbors.get(j).map)) {
-					int x1 = mapNodes.get(i).xPos + nodeSizeReg / 2;
-					int y1 = mapNodes.get(i).yPos + nodeSizeReg / 2;
-					int x2 = mapNodes.get(i).neighbors.get(j).xPos + nodeSizeReg / 2;
-					int y2 = mapNodes.get(i).neighbors.get(j).yPos + nodeSizeReg / 2;
+				if (mapNodes.get(i).getMap().equals(mapNodes.get(i).getNeighbors().get(j).getMap())) {
+					int x1 = mapNodes.get(i).getxPos() + nodeSizeReg / 2;
+					int y1 = mapNodes.get(i).getyPos() + nodeSizeReg / 2;
+					int x2 = mapNodes.get(i).getNeighbors().get(j).getxPos() + nodeSizeReg / 2;
+					int y2 = mapNodes.get(i).getNeighbors().get(j).getyPos() + nodeSizeReg / 2;
 					gc.setLineWidth(4);
 					gc.setStroke(Color.BLUE);
 					gc.strokeLine(x1, y1, x2, y2);
@@ -1130,18 +1127,18 @@ public class MainController implements Initializable {
 				// System.out.println("********************");
 
 				if (n1 != null && n2 != null) {
-					if (n1.neighbors == null) {
-						n1.neighbors.add(n2);
+					if (n1.getNeighbors() == null) {
+						n1.getNeighbors().add(n2);
 
 					} else {
-						n1.neighbors.add(n2);
+						n1.getNeighbors().add(n2);
 					}
 
 				} else {
 					System.out.println("Transition");
 					Node node = new Node("", x2, y2, 0, map2, "", "");
 					tempMapTransitionNodes.add(node);
-					n1.neighbors.add(node);
+					n1.getNeighbors().add(node);
 				}
 			}
 
@@ -1176,7 +1173,7 @@ public class MainController implements Initializable {
 	// found
 	{
 		for (Node n : nodeList) {
-			if (n.xPos == x && n.yPos == y) {
+			if (n.getxPos() == x && n.getyPos() == y) {
 				return n;
 			}
 		}
@@ -1222,7 +1219,7 @@ public class MainController implements Initializable {
 				}
 
 				Node newNode = new Node(name, x, y, z, map, description, type);
-				newNode.isTransitionNode = isTrans;
+				newNode.setTransitionNode(isTrans);
 				nodeList.add(newNode);
 			}
 
@@ -1282,7 +1279,7 @@ public class MainController implements Initializable {
 				}
 
 				Node newNode = new Node(name, x, y, z, map, description, type);
-				newNode.isTransitionNode = isTrans;
+				newNode.setTransitionNode(isTrans);
 				nodeList.add(newNode);
 			}
 
@@ -1307,7 +1304,7 @@ public class MainController implements Initializable {
 		transNodeStore.clear();
 
 		for (Node n : mapNodesNumber) {
-			if (n.isTransitionNode == true) {
+			if (n.isTransitionNode() == true) {
 				transNodeStore.add(n);
 
 			}
@@ -1320,22 +1317,22 @@ public class MainController implements Initializable {
 			FileWriter writer = new FileWriter(fileName);
 
 			for (int i = 0; i < mapNodes.size(); i++) {
-				for (int j = 0; j < mapNodes.get(i).neighbors.size(); j++) {
-					writer.append(Integer.toString(mapNodes.get(i).xPos));
+				for (int j = 0; j < mapNodes.get(i).getNeighbors().size(); j++) {
+					writer.append(Integer.toString(mapNodes.get(i).getxPos()));
 					writer.append(',');
-					writer.append(Integer.toString(mapNodes.get(i).yPos));
+					writer.append(Integer.toString(mapNodes.get(i).getyPos()));
 					writer.append(',');
-					writer.append(Integer.toString(mapNodes.get(i).zPos));
+					writer.append(Integer.toString(mapNodes.get(i).getzPos()));
 					writer.append(',');
-					writer.append(mapNodes.get(i).map);
+					writer.append(mapNodes.get(i).getMap());
 					writer.append(',');
-					writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).xPos));
+					writer.append(Integer.toString(mapNodes.get(i).getNeighbors().get(j).getxPos()));
 					writer.append(',');
-					writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).yPos));
+					writer.append(Integer.toString(mapNodes.get(i).getNeighbors().get(j).getyPos()));
 					writer.append(',');
-					writer.append(Integer.toString(mapNodes.get(i).neighbors.get(j).zPos));
+					writer.append(Integer.toString(mapNodes.get(i).getNeighbors().get(j).getzPos()));
 					writer.append(',');
-					writer.append(mapNodes.get(i).neighbors.get(j).map);
+					writer.append(mapNodes.get(i).getNeighbors().get(j).getMap());
 
 					writer.append("\n");
 				}
@@ -1349,12 +1346,12 @@ public class MainController implements Initializable {
 
 	protected void renderTransitionNodes() {
 		for (Node n : mapNodes) {
-			if (n.isTransitionNode == true) {
+			if (n.isTransitionNode() == true) {
 				GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 				gc.setFill(Color.BLUE);
-				gc.fillRect(n.xPos - .75, n.yPos - .75, nodeSizeReg + 10, nodeSizeReg + 10);
+				gc.fillRect(n.getxPos() - .75, n.getyPos() - .75, nodeSizeReg + 10, nodeSizeReg + 10);
 				gc.setFill(Color.WHITE);
-				gc.fillOval(n.xPos + 4, n.yPos + 4, nodeSizeReg, nodeSizeReg);
+				gc.fillOval(n.getxPos() + 4, n.getyPos() + 4, nodeSizeReg, nodeSizeReg);
 			}
 		}
 	}
@@ -1412,20 +1409,20 @@ public class MainController implements Initializable {
 	public void highlightNode(int iterator) {
 		GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 
-		if (mapNodes.get(iterator).isTransitionNode) {
+		if (mapNodes.get(iterator).isTransitionNode()) {
 			gc.setFill(Color.GOLD);
-			gc.fillRect((double) mapNodes.get(iterator).xPos - .75, (double) mapNodes.get(iterator).yPos - .75,
+			gc.fillRect((double) mapNodes.get(iterator).getxPos() - .75, (double) mapNodes.get(iterator).getyPos() - .75,
 					nodeSizeReg + 10, nodeSizeReg + 10);
 			gc.setFill(Color.WHITE);
-			gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, nodeSizeReg,
+			gc.fillOval((double) mapNodes.get(iterator).getxPos() + 4, (double) mapNodes.get(iterator).getyPos() + 4, nodeSizeReg,
 					nodeSizeReg);
 		} else {
 			gc.setFill(Color.GOLD);
-			gc.fillOval((double) mapNodes.get(iterator).xPos, (double) mapNodes.get(iterator).yPos, nodeSizeReg,
+			gc.fillOval((double) mapNodes.get(iterator).getxPos(), (double) mapNodes.get(iterator).getyPos(), nodeSizeReg,
 					nodeSizeReg);
 			gc.setFill(Color.RED);
-			gc.fillOval((double) mapNodes.get(iterator).xPos + nodeSizeReg / 7.5,
-					(double) mapNodes.get(iterator).yPos + nodeSizeReg / 7.5, nodeSizeReg / 1.36, nodeSizeReg / 1.36);
+			gc.fillOval((double) mapNodes.get(iterator).getxPos() + nodeSizeReg / 7.5,
+					(double) mapNodes.get(iterator).getyPos() + nodeSizeReg / 7.5, nodeSizeReg / 1.36, nodeSizeReg / 1.36);
 		}
 	}
 
