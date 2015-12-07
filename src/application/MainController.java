@@ -179,10 +179,8 @@ public class MainController implements Initializable {
 	static boolean oneSelected = false;
 	static boolean twoSelected = false;
 	Node currentNode;
-	public final static int SNAP_LENIENCY = 40;
+	public final static int SNAP_LENIENCY = 20;
 	public final static int SNAP_RANGE = 100;
-	static boolean isDeleteDone = false;
-	static boolean isAddDone = false;
 	private static boolean snapToNodes = false;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
