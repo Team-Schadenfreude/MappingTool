@@ -157,7 +157,7 @@ public class MainController implements Initializable {
 	private int secondNodeLoc = -1;
 	private int nodeSizeReg =30;
 	private int nodeSizeRegY;
-	private int nodeSizeCampus = nodeSizeReg/2;
+	private int nodeSizeCampus = nodeSizeReg/4;
 	private int nodeSizeCampusY;
 
 
@@ -1013,10 +1013,10 @@ public class MainController implements Initializable {
 				
 				// Checks if both nodes are on the same map.
 				if (mapNodes.get(i).map.equals(mapNodes.get(i).neighbors.get(j).map)){
-					int x1 = mapNodes.get(i).xPos + 15;
-					int y1 = mapNodes.get(i).yPos + 15;
-					int x2 = mapNodes.get(i).neighbors.get(j).xPos + 15;
-					int y2 = mapNodes.get(i).neighbors.get(j).yPos + 15;
+					int x1 = mapNodes.get(i).xPos + nodeSizeReg/2;
+					int y1 = mapNodes.get(i).yPos + nodeSizeReg/2;
+					int x2 = mapNodes.get(i).neighbors.get(j).xPos + nodeSizeReg/2;
+					int y2 = mapNodes.get(i).neighbors.get(j).yPos + nodeSizeReg/2;
 					gc.setLineWidth(4);
 					gc.setStroke(Color.BLUE);
 					gc.strokeLine(x1, y1, x2, y2);
