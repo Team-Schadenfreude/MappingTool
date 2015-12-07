@@ -179,10 +179,8 @@ public class MainController implements Initializable {
 	static boolean oneSelected = false;
 	static boolean twoSelected = false;
 	Node currentNode;
-	public final static int SNAP_LENIENCY = 40;
+	public final static int SNAP_LENIENCY = 20;
 	public final static int SNAP_RANGE = 100;
-	static boolean isDeleteDone = false;
-	static boolean isAddDone = false;
 	private static boolean snapToNodes = false;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -268,6 +266,14 @@ public class MainController implements Initializable {
 
 									}
 								}
+							}
+							if (changedX && changedY && refNodeX == refNodeY){
+								// Checks if the node is going to be snapped right on top of another node
+								// and if so, instead only snaps it on one axis
+								if( Math.abs(eventXPos - eventXTemp) <= Math.abs(eventYPos - eventYTemp) )
+									changedY = false;
+								else
+									changedX = false;
 							}
 							if (changedX) {
 								eventXPos = eventXTemp;
