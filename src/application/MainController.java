@@ -730,9 +730,14 @@ public class MainController implements Initializable {
 
 				mapView.setFitWidth(zoomProperty.get() * 2);
 				mapView.setFitHeight(zoomProperty.get() * 3);
-				imageCanvas.setScaleX(zoomProperty.get() / 1650);
-				imageCanvas.setScaleY(zoomProperty.get() / 1650);
-
+				
+				if(!isCampus){
+				imageCanvas.setScaleX(zoomProperty.get() / 550);
+				imageCanvas.setScaleY(zoomProperty.get() / 550);
+				} else {
+					imageCanvas.setScaleX(zoomProperty.get() / 1650);
+					imageCanvas.setScaleY(zoomProperty.get() / 1650);
+				}
 				scrollImage.setContent(stack);
 
 			}
