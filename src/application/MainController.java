@@ -659,7 +659,6 @@ public class MainController implements Initializable {
 						Main.primaryStage.centerOnScreen();
 						node2.setLayoutX(map2Dropdown.getLayoutX());
 						setTypes();
-						snap.setLayoutX(scrollImage.getWidth() - 935);
 
 					} catch (IOException ex) {
 
@@ -745,6 +744,8 @@ public class MainController implements Initializable {
 							System.out.println(mapNodes);
 							System.out.println(map1TransitionNodes.get(0).neighbors);
 							System.out.println(map1TransitionNodes.get(1).neighbors);
+							snap.setLayoutX(scrollImage.getWidth() - 935);
+
 						}
 						ex.printStackTrace();
 					}
