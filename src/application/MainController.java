@@ -57,7 +57,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 public class MainController implements Initializable {
-    DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
+	DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
 
 	static List<Node> mapNodes = new ArrayList<Node>();
 	static List<Node> mapNodes2 = new ArrayList<Node>();
@@ -85,6 +85,9 @@ public class MainController implements Initializable {
 
 	@FXML
 	private Label map1 = new Label();
+
+	@FXML
+	private CheckBox snap;
 
 	@FXML
 	private Label map2 = new Label();
@@ -177,9 +180,11 @@ public class MainController implements Initializable {
 	static boolean oneSelected = false;
 	static boolean twoSelected = false;
 	Node currentNode;
-
+	public final static int SNAP_LENIENCY = 40;
+	public final static int SNAP_RANGE = 100;
 	static boolean isDeleteDone = false;
 	static boolean isAddDone = false;
+	private static boolean snapToNodes = false;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -209,10 +214,18 @@ public class MainController implements Initializable {
 				shouldAddNode = true;
 				nodeOptions.setText("Adding Node");
 
+
 				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
 					@Override
 					public void handle(MouseEvent event) {
+
+						double eventXPos = event.getX();
+						double eventYPos = event.getY();
+						boolean changedX = false;
+						boolean changedY = false;
+						int refNodeX = 0;
+						int refNodeY = 0;
 
 						// System.out.println("GetSceneCoords");
 						// System.out.println(event.getY());
@@ -221,12 +234,88 @@ public class MainController implements Initializable {
 						// imageCanvas.getGraphicsContext2D().clearRect(0,
 						// 0, imageCanvas.getWidth(),
 						// imageCanvas.getHeight());
+
+
+						if (snapToNodes){
+							System.out.println("Snapping");
+							double eventXTemp = event.getX() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
+							double eventYTemp = event.getY() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
+							for (int i = 0; i < mapNodes.size(); i++) {
+								if (mapNodes.get(i).xPos >= eventXPos - 5 - nodeSizeReg - SNAP_LENIENCY
+										&& mapNodes.get(i).xPos <= eventXPos - 5 + nodeSizeReg + SNAP_LENIENCY
+										&& mapNodes.get(i).yPos >= eventYPos - 5 - nodeSizeReg - SNAP_RANGE
+										&& mapNodes.get(i).yPos <= eventYPos - 5 + nodeSizeReg + SNAP_RANGE) {
+									// Makes sure your using the closest connection
+									if ( Math.abs(event.getX() - mapNodes.get(i).xPos) < 
+											Math.abs(event.getX() - eventXTemp) ) {
+										eventXTemp = mapNodes.get(i).xPos + nodeSizeReg/2;
+										changedX = true;
+										refNodeX = i;
+									}
+
+								}
+								if (mapNodes.get(i).yPos >= eventYPos - 5 - nodeSizeReg - SNAP_LENIENCY
+										&& mapNodes.get(i).yPos <= eventYPos - 5 + nodeSizeReg + SNAP_LENIENCY
+										&& mapNodes.get(i).xPos >= eventXPos - 5 - nodeSizeReg - SNAP_RANGE
+										&& mapNodes.get(i).xPos <= eventXPos - 5 + nodeSizeReg + SNAP_RANGE) {
+									if ( Math.abs(event.getY() - mapNodes.get(i).yPos) < 
+											Math.abs(event.getY() - eventYTemp) ) { 
+										eventYTemp = mapNodes.get(i).yPos + nodeSizeReg/2;
+										changedY = true;
+										refNodeY = i;
+
+									}
+								}
+							}
+							if (changedX) {
+								eventXPos = eventXTemp;
+								System.out.println("Snapping to X: " + eventXPos);
+							}
+							if (changedY) {
+								eventYPos = eventYTemp;
+								System.out.println("Snapping to Y: " + eventYPos);
+							}
+						}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 						if (doOnce) {
 							if (mapNodes.size() == 0) {
 								// System.out.println("Creating new node
 								// at " + event.getX() + " " +
 								// event.getY());
-								Node node = new Node("node", (int) event.getX() - nodeSizeReg/2, (int) event.getY() - nodeSizeReg/2, 0,
+								Node node = new Node("node", (int) eventXPos - nodeSizeReg/2, (int)eventYPos - nodeSizeReg/2, 0,
 										nodeMapName, "","None");
 								mapNodes.add(node);
 								clearCanvas();
@@ -239,10 +328,10 @@ public class MainController implements Initializable {
 						} else {
 
 							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
-										&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
-										&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
-										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
+								if (mapNodes.get(i).xPos >= eventXPos - 5 - nodeSizeReg
+										&& mapNodes.get(i).xPos <= eventXPos - 5 + nodeSizeReg
+										&& mapNodes.get(i).yPos >= eventYPos - 5 - nodeSizeReg
+										&& mapNodes.get(i).yPos <= eventYPos - 5 + nodeSizeReg) {
 									// System.out.println("Node already
 									// exists here");
 									// System.out.println(mapNodes.get(i).xPos);
@@ -257,15 +346,23 @@ public class MainController implements Initializable {
 								}
 							}
 						}
-						
+
 						if (!shouldAddNode) {
 							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 						} else if (duplicateNode == 0) {
 							// System.out.println("In duplicate node");
-							Node node = new Node("node", (int) event.getX() - nodeSizeReg/2, (int) event.getY() - nodeSizeReg/2, 0,
+							Node node = new Node("node", (int) eventXPos - nodeSizeReg/2, (int) eventYPos - nodeSizeReg/2, 0,
 									nodeMapName, "","None");
 							mapNodes.add(node);
 							renderEverything();
+							if (changedX) {
+								System.out.println("Snapping to X: " + eventXPos);
+								highlightNode(refNodeX);
+							}
+							if (changedY) {
+								System.out.println("Snapping to Y: " + eventYPos);
+								highlightNode(refNodeY);
+							}
 							// System.out.println(mapNodes);
 						} else {
 							duplicateNode = 0;
@@ -380,7 +477,7 @@ public class MainController implements Initializable {
 
 				resetAllVariables();
 				shouldModifyNode = true;
-				
+
 				if(currentNodeLoc!=-1){
 					typeBox.setPromptText("Node Type");
 				}
@@ -390,12 +487,12 @@ public class MainController implements Initializable {
 
 					@Override
 					public void handle(MouseEvent event) {
-						
+
 
 						if (!shouldModifyNode || shouldAddNode) {
 							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
 						}
-						
+
 						//System.out.println("Restarting Event Handler");
 						typeBox.setPromptText("Node Type");
 						clearCanvas();
@@ -403,9 +500,9 @@ public class MainController implements Initializable {
 						nodeName.setStyle(null);
 						nodeDescription.setStyle(null);
 						for (int i = 0; i < mapNodes.size(); i++) {
-							
-							
-							
+
+
+
 							if (mapNodes.get(i).xPos >= event.getX() - 5 - nodeSizeReg
 									&& mapNodes.get(i).xPos <= event.getX() - 5 + nodeSizeReg
 									&& mapNodes.get(i).yPos >= event.getY() - 5 - nodeSizeReg
@@ -419,19 +516,19 @@ public class MainController implements Initializable {
 								} else {
 									isTransitionCheckbox.setSelected(false);
 								}
-								
-								
+
+
 
 								if(mapNodes.get(currentNodeLoc).type != ""){
 									System.out.println("In setting of box");
 									typeBox.setValue(mapNodes.get(currentNodeLoc).type);
 									System.out.println(mapNodes.get(currentNodeLoc).type);
-									
+
 								} else {
 									typeBox.setPromptText("Node Type");
 
 								}
-								
+
 								highlightNode(i);
 							}
 						}
@@ -447,8 +544,8 @@ public class MainController implements Initializable {
 
 			@Override
 			public void handle(Event arg0) {
-				
-				
+
+
 				mapNodes.get(currentNodeLoc).type = typeBox.getSelectionModel().getSelectedItem();
 				System.out.println(mapNodes.get(currentNodeLoc).type);
 				String isTrans = mapNodes.get(currentNodeLoc).type;
@@ -456,20 +553,20 @@ public class MainController implements Initializable {
 				case "Stairs":
 					mapNodes.get(currentNodeLoc).isTransitionNode = true;
 					break;
-					
+
 				case "Entrance":
 					mapNodes.get(currentNodeLoc).isTransitionNode = true;
 					break;
-					
+
 				case "Elevator":
 					mapNodes.get(currentNodeLoc).isTransitionNode = true;
 					break;
-					
-					default:
-						mapNodes.get(currentNodeLoc).isTransitionNode = false;
+
+				default:
+					mapNodes.get(currentNodeLoc).isTransitionNode = false;
 
 				}
-			
+
 				renderEverything();
 			}
 
@@ -491,13 +588,13 @@ public class MainController implements Initializable {
 					nodeMapName = selectedFile.getName();
 					try {
 						clearCanvas();
-						
+
 						img = ImageIO.read(new File(Paths.get(path + "map.png").toString()));
-						
+
 						image = SwingFXUtils.toFXImage(img, null);
 
 						mapView.setImage(image);
-					    mapView.preserveRatioProperty().set(true);
+						mapView.preserveRatioProperty().set(true);
 
 						loadMap1.setText(selectedFile.getName());
 						// mapView.setFitHeight(440);
@@ -562,12 +659,10 @@ public class MainController implements Initializable {
 						Main.primaryStage.centerOnScreen();
 						node2.setLayoutX(map2Dropdown.getLayoutX());
 						setTypes();
-						System.out.println(mapNodes);
-						System.out.println(map1TransitionNodes.get(0).neighbors);
-						System.out.println(map1TransitionNodes.get(1).neighbors);
+						snap.setLayoutX(scrollImage.getWidth() - 935);
 
 					} catch (IOException ex) {
-						
+
 						System.out.println("Failed");
 						if(img==null){
 							System.out.println("Found Campus Map");
@@ -582,7 +677,7 @@ public class MainController implements Initializable {
 							image = SwingFXUtils.toFXImage(img, null);
 
 							mapView.setImage(image);
-						    mapView.preserveRatioProperty().set(true);
+							mapView.preserveRatioProperty().set(true);
 
 							loadMap1.setText(selectedFile.getName());
 							// mapView.setFitHeight(440);
@@ -656,39 +751,51 @@ public class MainController implements Initializable {
 				}
 			}
 		});
-
 		
+		
+		
+		snap.setOnAction(new EventHandler(){
+
+			@Override
+			public void handle(Event arg0) {
+				snapToNodes = !snapToNodes;
+			}
+			
+		});
+
+
 		zoomProperty.addListener(new InvalidationListener() {
-		      
+
 
 			@Override
 			public void invalidated(Observable arg0) {
 				// TODO Auto-generated method stub
-				  	
-					mapView.setFitWidth(zoomProperty.get() * 2);
-			        mapView.setFitHeight(zoomProperty.get() * 3);
-			        imageCanvas.setScaleX(zoomProperty.get() / 1650);
-			        imageCanvas.setScaleY(zoomProperty.get() / 1650);
 
-			        scrollImage.setContent(stack);
+				mapView.setFitWidth(zoomProperty.get() * 2);
+				mapView.setFitHeight(zoomProperty.get() * 3);
+				imageCanvas.setScaleX(zoomProperty.get() / 1650);
+				imageCanvas.setScaleY(zoomProperty.get() / 1650);
+
+
+				scrollImage.setContent(stack);
 
 			}
-		    });
-		
-		
-		
+		});
+
+
+
 		scrollImage.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
-		      @Override
-		      public void handle(ScrollEvent event) {
-		        if (event.getDeltaY() > 0) {
-		          zoomProperty.set(zoomProperty.get() * 1.2);
-		        } else if (event.getDeltaY() < 0) {
-		          zoomProperty.set(zoomProperty.get() / 1.1);
-		        }
-		      }
-		    });
-		
-		
+			@Override
+			public void handle(ScrollEvent event) {
+				if (event.getDeltaY() > 0) {
+					zoomProperty.set(zoomProperty.get() * 1.2);
+				} else if (event.getDeltaY() < 0) {
+					zoomProperty.set(zoomProperty.get() / 1.1);
+				}
+			}
+		});
+
+
 		loadMap2.setOnAction(new EventHandler() {
 
 			@Override
@@ -753,7 +860,7 @@ public class MainController implements Initializable {
 										&& mapNodes.get(i).yPos <= event.getY() - 5 + nodeSizeReg) {
 									firstNodeLoc = i;
 									numberClicks += 1;
-									
+
 									highlightNode(i);
 
 								}
@@ -994,7 +1101,7 @@ public class MainController implements Initializable {
 				writer.append(",");
 				writer.append(mapNodes.get(i).type);
 				writer.append("\n");
-				
+
 				System.out.println("Print all map nodes.");
 				System.out.println(mapNodes.get(i).map);
 			}
@@ -1010,7 +1117,7 @@ public class MainController implements Initializable {
 
 		for (int i = 0; i < mapNodes.size() - 1; i++) {
 			for (int j = 0; j < mapNodes.get(i).neighbors.size(); j++) {
-				
+
 				// Checks if both nodes are on the same map.
 				if (mapNodes.get(i).map.equals(mapNodes.get(i).neighbors.get(j).map)){
 					int x1 = mapNodes.get(i).xPos + nodeSizeReg/2;
@@ -1023,7 +1130,7 @@ public class MainController implements Initializable {
 				} else {
 					// Nothing...
 				}
-	
+
 			}
 
 		}
@@ -1055,7 +1162,7 @@ public class MainController implements Initializable {
 				map1 = edgeData[edge1map];
 				map2 = edgeData[edge2map];
 				System.out.println(map1+" "+map2);
-				
+
 				// System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
 				Node n1 = findNodeByXY(nodeList, x1, y1);
 				Node n2 = findNodeByXY(nodeList, x2, y2);
@@ -1155,8 +1262,8 @@ public class MainController implements Initializable {
 				} else {
 					type = nodeData[nodeTypeIndex];
 				}
-				
-				
+
+
 				Node newNode = new Node(name, x, y, z, map, description,type);
 				newNode.isTransitionNode = isTrans;
 				nodeList.add(newNode);
@@ -1210,13 +1317,13 @@ public class MainController implements Initializable {
 				if (nodeData[nodeTransIndex] != null) {
 					isTrans = Boolean.valueOf(nodeData[nodeTransIndex]);
 				}
-				
+
 				if(nodeData[nodeTypeIndex] != null){
 					type = nodeData[nodeTypeIndex];
 				} else {
 					type = "None";
 				}
-				
+
 				Node newNode = new Node(name, x, y, z, map, description,type);
 				newNode.isTransitionNode = isTrans;
 				nodeList.add(newNode);
@@ -1344,24 +1451,24 @@ public class MainController implements Initializable {
 		typeBox.setItems(FXCollections.observableArrayList(typeList));
 
 	}
-	
-	 public void highlightNode(int iterator){
-		 GraphicsContext gc = imageCanvas.getGraphicsContext2D();
-		 
-		 if (mapNodes.get(iterator).isTransitionNode) {
-			 gc.setFill(Color.GOLD);
-				gc.fillRect((double) mapNodes.get(iterator).xPos-.75, (double) mapNodes.get(iterator).yPos-.75, nodeSizeReg+10, nodeSizeReg+10);
-				gc.setFill(Color.WHITE);
-				gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, nodeSizeReg,
-						nodeSizeReg);
-		 } else {
+
+	public void highlightNode(int iterator){
+		GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+
+		if (mapNodes.get(iterator).isTransitionNode) {
+			gc.setFill(Color.GOLD);
+			gc.fillRect((double) mapNodes.get(iterator).xPos-.75, (double) mapNodes.get(iterator).yPos-.75, nodeSizeReg+10, nodeSizeReg+10);
+			gc.setFill(Color.WHITE);
+			gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, nodeSizeReg,
+					nodeSizeReg);
+		} else {
 			gc.setFill(Color.GOLD);
 			gc.fillOval((double) mapNodes.get(iterator).xPos, (double) mapNodes.get(iterator).yPos, nodeSizeReg, nodeSizeReg);
 			gc.setFill(Color.RED);
 			gc.fillOval((double) mapNodes.get(iterator).xPos + nodeSizeReg/7.5, (double) mapNodes.get(iterator).yPos + nodeSizeReg/7.5, nodeSizeReg/1.36,
 					nodeSizeReg/1.36);
-		 }
-	 }
+		}
+	}
 
 
 }
