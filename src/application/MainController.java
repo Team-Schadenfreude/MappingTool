@@ -659,6 +659,8 @@ public class MainController implements Initializable {
 						Main.primaryStage.centerOnScreen();
 						node2.setLayoutX(map2Dropdown.getLayoutX());
 						setTypes();
+						snap.setLayoutX(scrollImage.getWidth() - 935);
+
 
 					} catch (IOException ex) {
 
