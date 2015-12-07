@@ -1358,8 +1358,8 @@ public class MainController implements Initializable {
 			gc.setFill(Color.GOLD);
 			gc.fillOval((double) mapNodes.get(iterator).xPos, (double) mapNodes.get(iterator).yPos, nodeSizeReg, nodeSizeReg);
 			gc.setFill(Color.RED);
-			gc.fillOval((double) mapNodes.get(iterator).xPos + 4, (double) mapNodes.get(iterator).yPos + 4, nodeSizeReg-8,
-					nodeSizeReg-8);
+			gc.fillOval((double) mapNodes.get(iterator).xPos + nodeSizeReg/7.5, (double) mapNodes.get(iterator).yPos + nodeSizeReg/7.5, nodeSizeReg/1.36,
+					nodeSizeReg/1.36);
 		 }
 	 }
 
