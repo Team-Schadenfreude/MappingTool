@@ -158,9 +158,9 @@ public class MainController implements Initializable {
 	private int duplicateNode = 1;
 	private int firstNodeLoc = -1;
 	private int secondNodeLoc = -1;
-	private int nodeSizeReg = 30;
+	private int nodeSizeReg = 15;
 	private int nodeSizeRegY;
-	private int nodeSizeCampus = nodeSizeReg / 4;
+	private int nodeSizeCampus = nodeSizeReg / 2;
 	private int nodeSizeCampusY;
 
 	public static boolean mapLoaded = false;
