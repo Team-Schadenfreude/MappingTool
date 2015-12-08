@@ -5,7 +5,6 @@ Alonso
 
 // AWT Imports
 import java.awt.image.BufferedImage;
-
 // IO Imports
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,11 +12,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+// Other Imports
+import java.net.URL;
+import java.nio.file.Paths;
 // UTIL Imports
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -47,14 +51,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
-
-// Other Imports
-import java.net.URL;
-import java.nio.file.Paths;
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 
 public class MainController implements Initializable {
 	DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
@@ -158,9 +156,9 @@ public class MainController implements Initializable {
 	private int duplicateNode = 1;
 	private int firstNodeLoc = -1;
 	private int secondNodeLoc = -1;
-	private int nodeSizeReg = 15;
+	private int nodeSizeReg = 8;
 	private int nodeSizeRegY;
-	private int nodeSizeCampus = nodeSizeReg / 2;
+	private int nodeSizeCampus = nodeSizeReg;
 	private int nodeSizeCampusY;
 
 	public static boolean mapLoaded = false;
@@ -182,6 +180,8 @@ public class MainController implements Initializable {
 	public final static int SNAP_LENIENCY = 20;
 	public final static int SNAP_RANGE = 100;
 	private static boolean snapToNodes = false;
+
+	private static boolean isAddDone = false;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -218,129 +218,133 @@ public class MainController implements Initializable {
 
 						if (!shouldAddNode) {
 							imageCanvas.removeEventHandler(MouseEvent.MOUSE_CLICKED, this);
-						}
+							System.out.println("Ended event handler for adding nodes.");
+						} else {
 
-						double eventXPos = event.getX();
-						double eventYPos = event.getY();
-						boolean changedX = false;
-						boolean changedY = false;
-						int refNodeX = 0;
-						int refNodeY = 0;
+							double eventXPos = event.getX();
+							double eventYPos = event.getY();
+							boolean changedX = false;
+							boolean changedY = false;
+							int refNodeX = 0;
+							int refNodeY = 0;
 
-						// System.out.println("GetSceneCoords");
-						// System.out.println(event.getY());
-						// System.out.println(event.getX());
+							// System.out.println("GetSceneCoords");
+							// System.out.println(event.getY());
+							// System.out.println(event.getX());
 
-						// imageCanvas.getGraphicsContext2D().clearRect(0,
-						// 0, imageCanvas.getWidth(),
-						// imageCanvas.getHeight());
+							// imageCanvas.getGraphicsContext2D().clearRect(0,
+							// 0, imageCanvas.getWidth(),
+							// imageCanvas.getHeight());
 
-						if (snapToNodes) {
-							System.out.println("Snapping");
-							double eventXTemp = event.getX() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
-							double eventYTemp = event.getY() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
-							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg - SNAP_LENIENCY
-										&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg + SNAP_LENIENCY
-										&& mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg - SNAP_RANGE
-										&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg + SNAP_RANGE) {
-									// Makes sure your using the closest
-									// connection
-									if (Math.abs(event.getX() - mapNodes.get(i).getxPos()) < Math
-											.abs(event.getX() - eventXTemp)) {
-										eventXTemp = mapNodes.get(i).getxPos() + nodeSizeReg / 2;
-										changedX = true;
-										refNodeX = i;
-									}
-
-								}
-								if (mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg - SNAP_LENIENCY
-										&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg + SNAP_LENIENCY
-										&& mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg - SNAP_RANGE
-										&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg + SNAP_RANGE) {
-									if (Math.abs(event.getY() - mapNodes.get(i).getyPos()) < Math
-											.abs(event.getY() - eventYTemp)) {
-										eventYTemp = mapNodes.get(i).getyPos() + nodeSizeReg / 2;
-										changedY = true;
-										refNodeY = i;
+							if (snapToNodes) {
+								System.out.println("Snapping");
+								double eventXTemp = event.getX() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
+								double eventYTemp = event.getY() + 5 + nodeSizeReg + SNAP_LENIENCY + 1;
+								for (int i = 0; i < mapNodes.size(); i++) {
+									if (mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg - SNAP_LENIENCY
+											&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg + SNAP_LENIENCY
+											&& mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg - SNAP_RANGE
+											&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg + SNAP_RANGE) {
+										// Makes sure your using the closest
+										// connection
+										if (Math.abs(event.getX() - mapNodes.get(i).getxPos()) < Math
+												.abs(event.getX() - eventXTemp)) {
+											eventXTemp = mapNodes.get(i).getxPos() + nodeSizeReg / 2;
+											changedX = true;
+											refNodeX = i;
+										}
 
 									}
+									if (mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg - SNAP_LENIENCY
+											&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg + SNAP_LENIENCY
+											&& mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg - SNAP_RANGE
+											&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg + SNAP_RANGE) {
+										if (Math.abs(event.getY() - mapNodes.get(i).getyPos()) < Math
+												.abs(event.getY() - eventYTemp)) {
+											eventYTemp = mapNodes.get(i).getyPos() + nodeSizeReg / 2;
+											changedY = true;
+											refNodeY = i;
+
+										}
+									}
+								}
+								if (changedX && changedY && refNodeX == refNodeY) {
+									// Checks if the node is going to be snapped
+									// right on top of another node
+									// and if so, instead only snaps it on one
+									// axis
+									if (Math.abs(eventXPos - eventXTemp) <= Math.abs(eventYPos - eventYTemp))
+										changedY = false;
+									else
+										changedX = false;
+								}
+								if (changedX) {
+									eventXPos = eventXTemp;
+									System.out.println("Snapping to X: " + eventXPos);
+								}
+								if (changedY) {
+									eventYPos = eventYTemp;
+									System.out.println("Snapping to Y: " + eventYPos);
 								}
 							}
-							if (changedX && changedY && refNodeX == refNodeY){
-								// Checks if the node is going to be snapped right on top of another node
-								// and if so, instead only snaps it on one axis
-								if( Math.abs(eventXPos - eventXTemp) <= Math.abs(eventYPos - eventYTemp) )
-									changedY = false;
-								else
-									changedX = false;
-							}
-							if (changedX) {
-								eventXPos = eventXTemp;
-								System.out.println("Snapping to X: " + eventXPos);
-							}
-							if (changedY) {
-								eventYPos = eventYTemp;
-								System.out.println("Snapping to Y: " + eventYPos);
-							}
-						}
 
-						if (doOnce) {
-							if (mapNodes.size() == 0) {
-								// System.out.println("Creating new node
-								// at " + event.getX() + " " +
-								// event.getY());
+							if (doOnce) {
+								if (mapNodes.size() == 0) {
+									// System.out.println("Creating new node
+									// at " + event.getX() + " " +
+									// event.getY());
+									Node node = new Node("node", (int) eventXPos - nodeSizeReg / 2,
+											(int) eventYPos - nodeSizeReg / 2, 0, nodeMapName, "", "None");
+									mapNodes.add(node);
+									clearCanvas();
+									renderEverything();
+									// System.out.println(mapNodes);
+
+									doOnce = false;
+									// System.out.println("Zero map Node");
+								}
+							} else {
+
+								for (int i = 0; i < mapNodes.size(); i++) {
+									if (mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg
+											&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg
+											&& mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg
+											&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg) {
+										// System.out.println("Node already
+										// exists here");
+										// System.out.println(mapNodes.get(i).xPos);
+										// System.out.println(mapNodes.get(i).yPos);
+										// System.out.println("Counter is: "
+										// + i);
+										// System.out.println(event.getX() -
+										// 5);
+										// System.out.println(event.getY() -
+										// 5);
+										duplicateNode++;
+									}
+								}
+							}
+
+							if (duplicateNode == 0) {
+								// System.out.println("In duplicate node");
 								Node node = new Node("node", (int) eventXPos - nodeSizeReg / 2,
 										(int) eventYPos - nodeSizeReg / 2, 0, nodeMapName, "", "None");
 								mapNodes.add(node);
-								clearCanvas();
 								renderEverything();
-								// System.out.println(mapNodes);
-
-								doOnce = false;
-								// System.out.println("Zero map Node");
-							}
-						} else {
-
-							for (int i = 0; i < mapNodes.size(); i++) {
-								if (mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg
-										&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg
-										&& mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg
-										&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg) {
-									// System.out.println("Node already
-									// exists here");
-									// System.out.println(mapNodes.get(i).xPos);
-									// System.out.println(mapNodes.get(i).yPos);
-									// System.out.println("Counter is: "
-									// + i);
-									// System.out.println(event.getX() -
-									// 5);
-									// System.out.println(event.getY() -
-									// 5);
-									duplicateNode++;
+								if (changedX) {
+									System.out.println("Snapping to X: " + eventXPos);
+									highlightNode(refNodeX);
 								}
+								if (changedY) {
+									System.out.println("Snapping to Y: " + eventYPos);
+									highlightNode(refNodeY);
+								}
+								// System.out.println(mapNodes);
+							} else {
+								duplicateNode = 0;
 							}
-						}
 
-						if (duplicateNode == 0) {
-							// System.out.println("In duplicate node");
-							Node node = new Node("node", (int) eventXPos - nodeSizeReg / 2,
-									(int) eventYPos - nodeSizeReg / 2, 0, nodeMapName, "", "None");
-							mapNodes.add(node);
-							renderEverything();
-							if (changedX) {
-								System.out.println("Snapping to X: " + eventXPos);
-								highlightNode(refNodeX);
-							}
-							if (changedY) {
-								System.out.println("Snapping to Y: " + eventYPos);
-								highlightNode(refNodeY);
-							}
-							// System.out.println(mapNodes);
-						} else {
-							duplicateNode = 0;
 						}
-
 					}
 				});
 			}
@@ -622,7 +626,6 @@ public class MainController implements Initializable {
 						setTypes();
 						snap.setLayoutX(scrollImage.getWidth() - 935);
 
-
 					} catch (IOException ex) {
 
 						System.out.println("Failed");
@@ -706,7 +709,7 @@ public class MainController implements Initializable {
 							node2.setLayoutX(map2Dropdown.getLayoutX());
 							setTypes();
 							System.out.println(mapNodes);
-						
+
 							snap.setLayoutX(scrollImage.getWidth() - 935);
 
 						}
@@ -733,10 +736,10 @@ public class MainController implements Initializable {
 
 				mapView.setFitWidth(zoomProperty.get() * 2);
 				mapView.setFitHeight(zoomProperty.get() * 3);
-				
-				if(!isCampus){
-				imageCanvas.setScaleX(zoomProperty.get() / 550);
-				imageCanvas.setScaleY(zoomProperty.get() / 550);
+
+				if (!isCampus) {
+					imageCanvas.setScaleX(zoomProperty.get() / 550);
+					imageCanvas.setScaleY(zoomProperty.get() / 550);
 				} else {
 					imageCanvas.setScaleX(zoomProperty.get() / 1650);
 					imageCanvas.setScaleY(zoomProperty.get() / 1650);
@@ -796,6 +799,7 @@ public class MainController implements Initializable {
 				resetAllVariables();
 				shouldAddEdge = true;
 				edgeOptions.setText("Adding Edge");
+				isAddDone = true;
 
 				imageCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
@@ -980,7 +984,8 @@ public class MainController implements Initializable {
 							twoSelected = false;
 
 							if (mapNodes.get(firstNodeLoc).getNeighbors().contains(mapNodes.get(secondNodeLoc))
-									&& mapNodes.get(secondNodeLoc).getNeighbors().contains(mapNodes.get(firstNodeLoc))) {
+									&& mapNodes.get(secondNodeLoc).getNeighbors()
+											.contains(mapNodes.get(firstNodeLoc))) {
 								mapNodes.get(firstNodeLoc).getNeighbors().remove(mapNodes.get(secondNodeLoc));
 								mapNodes.get(secondNodeLoc).getNeighbors().remove(mapNodes.get(firstNodeLoc));
 								clearCanvas();
@@ -1417,18 +1422,19 @@ public class MainController implements Initializable {
 
 		if (mapNodes.get(iterator).isTransitionNode()) {
 			gc.setFill(Color.GOLD);
-			gc.fillRect((double) mapNodes.get(iterator).getxPos() - .75, (double) mapNodes.get(iterator).getyPos() - .75,
-					nodeSizeReg + 10, nodeSizeReg + 10);
+			gc.fillRect((double) mapNodes.get(iterator).getxPos() - .75,
+					(double) mapNodes.get(iterator).getyPos() - .75, nodeSizeReg + 10, nodeSizeReg + 10);
 			gc.setFill(Color.WHITE);
-			gc.fillOval((double) mapNodes.get(iterator).getxPos() + 4, (double) mapNodes.get(iterator).getyPos() + 4, nodeSizeReg,
-					nodeSizeReg);
+			gc.fillOval((double) mapNodes.get(iterator).getxPos() + 4, (double) mapNodes.get(iterator).getyPos() + 4,
+					nodeSizeReg, nodeSizeReg);
 		} else {
 			gc.setFill(Color.GOLD);
-			gc.fillOval((double) mapNodes.get(iterator).getxPos(), (double) mapNodes.get(iterator).getyPos(), nodeSizeReg,
-					nodeSizeReg);
+			gc.fillOval((double) mapNodes.get(iterator).getxPos(), (double) mapNodes.get(iterator).getyPos(),
+					nodeSizeReg, nodeSizeReg);
 			gc.setFill(Color.RED);
 			gc.fillOval((double) mapNodes.get(iterator).getxPos() + nodeSizeReg / 7.5,
-					(double) mapNodes.get(iterator).getyPos() + nodeSizeReg / 7.5, nodeSizeReg / 1.36, nodeSizeReg / 1.36);
+					(double) mapNodes.get(iterator).getyPos() + nodeSizeReg / 7.5, nodeSizeReg / 1.36,
+					nodeSizeReg / 1.36);
 		}
 	}
 
