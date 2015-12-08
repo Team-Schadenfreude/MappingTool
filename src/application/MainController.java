@@ -1360,7 +1360,7 @@ public class MainController implements Initializable {
 			if (n.isTransitionNode() == true) {
 				GraphicsContext gc = imageCanvas.getGraphicsContext2D();
 				gc.setFill(Color.BLUE);
-				gc.fillRect(n.getxPos() - .75, n.getyPos() - .75, nodeSizeReg + 10, nodeSizeReg + 10);
+				gc.fillRect(n.getxPos() - .75, n.getyPos() - .75, nodeSizeReg + 5, nodeSizeReg + 5);
 				gc.setFill(Color.WHITE);
 				gc.fillOval(n.getxPos() + 4, n.getyPos() + 4, nodeSizeReg, nodeSizeReg);
 			}
