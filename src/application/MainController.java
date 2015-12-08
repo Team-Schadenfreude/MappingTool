@@ -741,8 +741,8 @@ public class MainController implements Initializable {
 					imageCanvas.setScaleX(zoomProperty.get() / 550);
 					imageCanvas.setScaleY(zoomProperty.get() / 550);
 				} else {
-					imageCanvas.setScaleX(zoomProperty.get() / 1650);
-					imageCanvas.setScaleY(zoomProperty.get() / 1650);
+					imageCanvas.setScaleX(zoomProperty.get() / 2200);
+					imageCanvas.setScaleY(zoomProperty.get() / 2200);
 				}
 				scrollImage.setContent(stack);
 
