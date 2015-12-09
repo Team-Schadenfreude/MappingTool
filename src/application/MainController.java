@@ -125,7 +125,7 @@ public class MainController implements Initializable {
 
 	private MenuItem deleteEdge = new MenuItem("Delete Edge");
 
-	private MenuItem showEdges = new MenuItem("Show Edges");
+	private MenuItem showEdits = new MenuItem("Show Edits");
 
 	private MenuItem addNode = new MenuItem("Add Node");
 
@@ -396,7 +396,7 @@ public class MainController implements Initializable {
 
 		edgeOptions.getItems().add(addEdge);
 		edgeOptions.getItems().add(deleteEdge);
-		edgeOptions.getItems().add(showEdges);
+		edgeOptions.getItems().add(showEdits);
 
 		isTransitionCheckbox.setOnAction(new EventHandler() {
 
@@ -505,6 +505,15 @@ public class MainController implements Initializable {
 				});
 
 			}
+		});
+
+		showEdits.setOnAction(new EventHandler() {
+
+			@Override
+			public void handle(Event arg0) {
+				showModifiedNodes();
+			}
+
 		});
 
 		typeBox.setOnAction(new EventHandler() {
@@ -1435,6 +1444,22 @@ public class MainController implements Initializable {
 			gc.fillOval((double) mapNodes.get(iterator).getxPos() + nodeSizeReg / 7.5,
 					(double) mapNodes.get(iterator).getyPos() + nodeSizeReg / 7.5, nodeSizeReg / 1.36,
 					nodeSizeReg / 1.36);
+		}
+	}
+
+	public void showModifiedNodes() {
+		GraphicsContext gc = imageCanvas.getGraphicsContext2D();
+
+		for (int i = 0; i < mapNodes.size(); i++) {
+			if (mapNodes.get(i).getType() == "Room" || mapNodes.get(i).getType() == "BathroomM"
+					|| mapNodes.get(i).getType() == "BathroomW") {
+				gc.setFill(Color.GREEN);
+				gc.fillOval((double) mapNodes.get(i).getxPos(), (double) mapNodes.get(i).getyPos(), nodeSizeReg,
+						nodeSizeReg);
+				gc.setFill(Color.WHITE);
+				gc.fillOval((double) mapNodes.get(i).getxPos() + nodeSizeReg / 7.5,
+						(double) mapNodes.get(i).getyPos() + nodeSizeReg / 7.5, nodeSizeReg / 1.36, nodeSizeReg / 1.36);
+			}
 		}
 	}
 
