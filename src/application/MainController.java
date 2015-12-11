@@ -1422,6 +1422,8 @@ public class MainController implements Initializable {
 		typeList.add("Entrance");
 		typeList.add("Room");
 		typeList.add("Stairs");
+		typeList.add("Intersection");
+		typeList.add("End of Hall");
 		typeBox.setItems(FXCollections.observableArrayList(typeList));
 
 	}
