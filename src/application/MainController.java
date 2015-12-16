@@ -254,11 +254,6 @@ public class MainController implements Initializable {
 											refNodeX = i;
 										}
 
-									}
-									if (mapNodes.get(i).getyPos() >= eventYPos - 5 - nodeSizeReg - SNAP_LENIENCY
-											&& mapNodes.get(i).getyPos() <= eventYPos - 5 + nodeSizeReg + SNAP_LENIENCY
-											&& mapNodes.get(i).getxPos() >= eventXPos - 5 - nodeSizeReg - SNAP_RANGE
-											&& mapNodes.get(i).getxPos() <= eventXPos - 5 + nodeSizeReg + SNAP_RANGE) {
 										if (Math.abs(event.getY() - mapNodes.get(i).getyPos()) < Math
 												.abs(event.getY() - eventYTemp)) {
 											eventYTemp = mapNodes.get(i).getyPos() + nodeSizeReg / 2;
@@ -266,7 +261,9 @@ public class MainController implements Initializable {
 											refNodeY = i;
 
 										}
+
 									}
+
 								}
 								if (changedX && changedY && refNodeX == refNodeY) {
 									// Checks if the node is going to be snapped
