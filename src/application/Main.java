@@ -11,10 +11,11 @@ import javafx.scene.layout.Pane;
 
 
 public class Main extends Application {
-	
     private Pane rootLayout;
     public static Stage primaryStage;
-
+    public static void main(String[] args) {
+		launch(args);
+	}
     @Override
 	public void start(Stage primaryStage) {
 		try {
@@ -58,7 +59,5 @@ public class Main extends Application {
         }
     }
 	
-	public static void main(String[] args) {
-		launch(args);
-	}
+	
 }
