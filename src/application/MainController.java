@@ -55,8 +55,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 
 public class MainController implements Initializable {
+
+	// ZOOM PROPERTY FOR SCROLL ZOOM
 	DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
 
+	// LIST OF NODES TO KEEP TRACK OF DATA
 	static List<Node> mapNodes = new ArrayList<Node>();
 	static List<Node> mapNodes2 = new ArrayList<Node>();
 	static List<String> typeList = new ArrayList<String>();
@@ -65,6 +68,8 @@ public class MainController implements Initializable {
 	static List<Node> tempMapTransitionNodes = new ArrayList<Node>();
 
 	static List<Node> edgeNodes = new ArrayList<Node>();
+
+	// THE FOLLOWING CODE GENERATES THE GUI OBJECTS AND FXML LAYOUTS
 
 	@FXML
 	private Pane pane = new Pane();
@@ -185,15 +190,20 @@ public class MainController implements Initializable {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
+
+	// initialize function for JavaFX
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
+		// Setting style for app
 		pane.setStyle("-fx-background-color: #545352;");
 
+		// adding relevant node options
 		nodeOptions.getItems().remove(0);
 		nodeOptions.getItems().remove(0);
 		edgeOptions.getItems().remove(0);
 		edgeOptions.getItems().remove(0);
 
+		// setting action handler for dropdowns that wil select nodes
 		map1Dropdown.setOnAction(new EventHandler() {
 
 			@Override
@@ -202,6 +212,7 @@ public class MainController implements Initializable {
 
 		});
 
+		// actions handler for adding nodes
 		addNode.setOnAction(new EventHandler() {
 
 			@Override
@@ -347,6 +358,8 @@ public class MainController implements Initializable {
 			}
 		});
 
+		// action handler for deleting node. Handles everything associated with
+		// deleting nodes
 		deleteNode.setOnAction(new EventHandler() {
 
 			@Override
@@ -387,6 +400,7 @@ public class MainController implements Initializable {
 			}
 		});
 
+		// setting node options and edge options
 		nodeOptions.getItems().add(addNode);
 		nodeOptions.getItems().add(deleteNode);
 		nodeOptions.getItems().add(modifyNode);
@@ -395,6 +409,7 @@ public class MainController implements Initializable {
 		edgeOptions.getItems().add(deleteEdge);
 		edgeOptions.getItems().add(showEdits);
 
+		// setting up transision scheckbox and adding event handler
 		isTransitionCheckbox.setOnAction(new EventHandler() {
 
 			@Override
@@ -406,6 +421,8 @@ public class MainController implements Initializable {
 
 		});
 
+		// node description handler. Sets the text description for the node
+		// selected
 		nodeDescription.setOnAction(new EventHandler() {
 
 			@Override
@@ -424,6 +441,7 @@ public class MainController implements Initializable {
 
 		});
 
+		// sets event handler to set the node name
 		nodeName.setOnAction(new EventHandler() {
 
 			@Override
@@ -442,6 +460,8 @@ public class MainController implements Initializable {
 
 		});
 
+		// event handler to modify nodes. Sets the selected node as the modified
+		// node
 		modifyNode.setOnAction(new EventHandler() {
 
 			@Override
@@ -504,6 +524,7 @@ public class MainController implements Initializable {
 			}
 		});
 
+		// shows all the nodes with different types
 		showEdits.setOnAction(new EventHandler() {
 
 			@Override
@@ -513,6 +534,7 @@ public class MainController implements Initializable {
 
 		});
 
+		// sets action handler for type of node
 		typeBox.setOnAction(new EventHandler() {
 
 			@Override
@@ -542,6 +564,8 @@ public class MainController implements Initializable {
 			}
 
 		});
+
+		// loads the first map that will be used for editing
 		loadMap1.setOnAction(new EventHandler() {
 
 			@Override
@@ -725,6 +749,7 @@ public class MainController implements Initializable {
 			}
 		});
 
+		// action hadler to set snap functionality
 		snap.setOnAction(new EventHandler() {
 
 			@Override
@@ -734,6 +759,7 @@ public class MainController implements Initializable {
 
 		});
 
+		// action listener for the zoom property
 		zoomProperty.addListener(new InvalidationListener() {
 
 			@Override
@@ -755,6 +781,7 @@ public class MainController implements Initializable {
 			}
 		});
 
+		// event handler to handle rescaling of image when zooming
 		scrollImage.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent event) {
@@ -766,6 +793,7 @@ public class MainController implements Initializable {
 			}
 		});
 
+		// handles loading of the second map
 		loadMap2.setOnAction(new EventHandler() {
 
 			@Override
@@ -797,6 +825,7 @@ public class MainController implements Initializable {
 
 		});
 
+		// handles to add a edge
 		addEdge.setOnAction(new EventHandler() {
 
 			@Override
@@ -899,6 +928,7 @@ public class MainController implements Initializable {
 
 		});
 
+		// saves supermap and all edge and node files
 		genSupermap.setOnAction(new EventHandler() {
 
 			@Override
